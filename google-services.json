@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "180461303397",
+    "firebase_url": "https://cryptoexec-29d32.firebaseio.com",
+    "project_id": "cryptoexec-29d32",
+    "storage_bucket": "cryptoexec-29d32.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:180461303397:android:639bf1bb2e0cab43",
+        "android_client_info": {
+          "package_name": "wit.cryptoexec"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "180461303397-g9rj8ftq2fk3f73ekmriu59io16im2um.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAD6UdijZqWrvomsPf0HV_iKzlC7riucFA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
