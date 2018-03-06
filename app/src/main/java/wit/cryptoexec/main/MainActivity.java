@@ -52,6 +52,66 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         retrieveDataFromAPI(); //gets data from coinmarketcap API https://coinmarketcap.com/api/
+
+        apiDetailsDatabase = new ApiDetailsDatabase();
+
+        exchangeServiceSave = findViewById(R.id.exchangeService);
+        apiKeySave = findViewById(R.id.apiKey);
+        apiSecretSave = findViewById(R.id.apiSecret);
+        submitApiDetails = findViewById(R.id.submitApiDetails);
+
+        getExchangeServiceGet = findViewById(R.id.exchangeServiceInput);
+        submitGetApiDetails = findViewById(R.id.getApiDetails);
+        apiDetailsText = findViewById(R.id.apiDetailsText);
+
+        submitApiDetails.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String exchangeService = exchangeServiceSave.getText().toString();
+                String apiKey = apiKeySave.getText().toString();
+                String apiSecret = apiSecretSave.getText().toString();
+
+                Log.v("Exchange Service", exchangeService);
+                Log.v("API Key", apiKey);
+                Log.v("API Secret", apiSecret);
+
+                try {
+                    if(apiDetailsDatabase.saveApiDetails(exchangeService, apiKey, apiSecret)) {
+                        Log.v("Success", "Added Api Detail to Database");
+                    } else {
+                        Log.v("Failure", "Could not add Api Detail to Database");
+                    }
+                } catch (Throwable throwable) {
+                    throwable.printStackTrace();
+                }
+            }
+        });
+
+        submitGetApiDetails.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final String exchangeService = getExchangeServiceGet.getText().toString();
+                try {
+                    apiDetailsDatabase.getApiKey(exchangeService).addOnSuccessListener(new OnSuccessListener<String>() {
+                        @Override
+                        public void onSuccess(final String apiKey) {
+                            try {
+                                apiDetailsDatabase.getApiSecret(exchangeService).addOnSuccessListener(new OnSuccessListener<String>() {
+                                    @Override
+                                    public void onSuccess(String apiSecret) {
+                                        apiDetailsText.setText(String.format("Exchange Service: %s\nAPI Key: %s\nAPI Secret: %s", exchangeService, apiKey, apiSecret));
+                                    }
+                                });
+                            } catch (Throwable throwable) {
+                                throwable.printStackTrace();
+                            }
+                        }
+                    });
+                } catch (Throwable throwable) {
+                    throwable.printStackTrace();
+                }
+            }
+        });
     }
 
     private void retrieveDataFromAPI() {
@@ -151,64 +211,5 @@ public class MainActivity extends AppCompatActivity {
         return new CryptoInfo(id, name, symbol, rank, price_usd, price_btc, usd_volume_24_hr, market_cap_usd, availableSupply,
                 totalSupply, maxSupply, percent_change_1h, percent_change_24h, percent_change_7d, last_updated);
     }
-        apiDetailsDatabase = new ApiDetailsDatabase();
 
-        exchangeServiceSave = findViewById(R.id.exchangeService);
-        apiKeySave = findViewById(R.id.apiKey);
-        apiSecretSave = findViewById(R.id.apiSecret);
-        submitApiDetails = findViewById(R.id.submitApiDetails);
-
-        getExchangeServiceGet = findViewById(R.id.exchangeServiceInput);
-        submitGetApiDetails = findViewById(R.id.getApiDetails);
-        apiDetailsText = findViewById(R.id.apiDetailsText);
-
-        submitApiDetails.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String exchangeService = exchangeServiceSave.getText().toString();
-                String apiKey = apiKeySave.getText().toString();
-                String apiSecret = apiSecretSave.getText().toString();
-
-                Log.v("Exchange Service", exchangeService);
-                Log.v("API Key", apiKey);
-                Log.v("API Secret", apiSecret);
-
-                try {
-                    if(apiDetailsDatabase.saveApiDetails(exchangeService, apiKey, apiSecret)) {
-                        Log.v("Success", "Added Api Detail to Database");
-                    } else {
-                        Log.v("Failure", "Could not add Api Detail to Database");
-                    }
-                } catch (Throwable throwable) {
-                    throwable.printStackTrace();
-                }
-            }
-        });
-
-        submitGetApiDetails.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final String exchangeService = getExchangeServiceGet.getText().toString();
-                try {
-                    apiDetailsDatabase.getApiKey(exchangeService).addOnSuccessListener(new OnSuccessListener<String>() {
-                        @Override
-                        public void onSuccess(final String apiKey) {
-                            try {
-                                apiDetailsDatabase.getApiSecret(exchangeService).addOnSuccessListener(new OnSuccessListener<String>() {
-                                    @Override
-                                    public void onSuccess(String apiSecret) {
-                                        apiDetailsText.setText(String.format("Exchange Service: %s\nAPI Key: %s\nAPI Secret: %s", exchangeService, apiKey, apiSecret));
-                                    }
-                                });
-                            } catch (Throwable throwable) {
-                                throwable.printStackTrace();
-                            }
-                        }
-                    });
-                } catch (Throwable throwable) {
-                    throwable.printStackTrace();
-                }
-            }
-        });
-    }
 }
