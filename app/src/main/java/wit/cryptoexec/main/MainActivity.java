@@ -1,13 +1,13 @@
 package wit.cryptoexec.main;
 
 import android.os.AsyncTask;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-<<<<<<< HEAD
 import android.util.JsonReader;
 import android.util.Log;
 import android.view.Menu;
-=======
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -15,7 +15,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
->>>>>>> 95adf033c68274b110bf846882526c9c7203fcde
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -52,7 +51,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-<<<<<<< HEAD
         retrieveDataFromAPI(); //gets data from coinmarketcap API https://coinmarketcap.com/api/
     }
 
@@ -93,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.HONEYCOMB)
     private CryptoInfo parseJSONArray(JsonReader reader) throws IOException {
         String id = null;
         String name = null;
@@ -133,15 +132,15 @@ public class MainActivity extends AppCompatActivity {
                 availableSupply = new BigDecimal(reader.nextString());
             } else if (keyName.equals("totalSupply")) {
                 totalSupply = new BigDecimal(reader.nextString());
-            }  else if (keyName.equals("maxSupply")) {
+            } else if (keyName.equals("maxSupply")) {
                 maxSupply = new BigDecimal(reader.nextString());
-            }  else if (keyName.equals("percent_change_1h")) {
+            } else if (keyName.equals("percent_change_1h")) {
                 percent_change_1h = Double.parseDouble(reader.nextString());
-            }  else if (keyName.equals("percent_change_24h")) {
+            } else if (keyName.equals("percent_change_24h")) {
                 percent_change_24h = Double.parseDouble(reader.nextString());
-            }  else if (keyName.equals("percent_change_7d")) {
+            } else if (keyName.equals("percent_change_7d")) {
                 percent_change_7d = Double.parseDouble(reader.nextString());
-            }  else if (keyName.equals("last_updated")) {
+            } else if (keyName.equals("last_updated")) {
                 last_updated = new BigInteger(reader.nextString());
             } else {
                 reader.skipValue();
@@ -149,9 +148,9 @@ public class MainActivity extends AppCompatActivity {
 
         }
         reader.endObject();
-        return new CryptoInfo (id, name, symbol, rank, price_usd, price_btc, usd_volume_24_hr, market_cap_usd, availableSupply,
+        return new CryptoInfo(id, name, symbol, rank, price_usd, price_btc, usd_volume_24_hr, market_cap_usd, availableSupply,
                 totalSupply, maxSupply, percent_change_1h, percent_change_24h, percent_change_7d, last_updated);
-=======
+    }
         apiDetailsDatabase = new ApiDetailsDatabase();
 
         exchangeServiceSave = findViewById(R.id.exchangeService);
@@ -211,6 +210,5 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
->>>>>>> 95adf033c68274b110bf846882526c9c7203fcde
     }
 }
