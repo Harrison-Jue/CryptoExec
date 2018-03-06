@@ -32,6 +32,8 @@ public class LogInActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        mAuth = FirebaseAuth.getInstance();
+
         email = findViewById(R.id.edit_text_email);
         password = findViewById(R.id.edit_text_password);
 
@@ -39,8 +41,9 @@ public class LogInActivity extends AppCompatActivity {
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                saveEmailAndPassword();
-                signIn(emailText, passwordText);
+                if(saveEmailAndPassword()) {
+                    signIn(emailText, passwordText);
+                }
             }
         });
 
@@ -48,8 +51,9 @@ public class LogInActivity extends AppCompatActivity {
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                saveEmailAndPassword();
-                createAccount(emailText, passwordText);
+                if(saveEmailAndPassword()) {
+                    createAccount(emailText, passwordText);
+                }
             }
         });
 
@@ -62,7 +66,7 @@ public class LogInActivity extends AppCompatActivity {
         });
 
 
-        mAuth = FirebaseAuth.getInstance();
+
     }
 
     @Override
@@ -117,8 +121,19 @@ public class LogInActivity extends AppCompatActivity {
         startActivity(myIntent);
     }
 
-    public void saveEmailAndPassword() {
+    public boolean saveEmailAndPassword() {
         emailText = email.getText().toString();
+        if(emailText.isEmpty()) {
+            email.setFocusableInTouchMode(true);
+            email.requestFocus();
+            return false;
+        }
         passwordText = password.getText().toString();
+        if(passwordText.isEmpty()) {
+            password.setFocusableInTouchMode(true);
+            password.requestFocus();
+            return false;
+        }
+        return true;
     }
 }
