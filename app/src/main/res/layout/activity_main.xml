@@ -6,57 +6,65 @@
     android:layout_height="match_parent"
     tools:context="wit.cryptoexec.main.MainActivity">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/restCall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="100"
+                android:scrollbars="vertical" />
+            <EditText
+                android:id="@+id/market"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Market"/>
+            <EditText
+                android:id="@+id/type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Type"/>
+            <Button
+                android:id="@+id/getMarketsButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Get Markets"/>
+            <Button
+                android:id="@+id/getCurrenciesButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Get Currencies"/>
+            <Button
+                android:id="@+id/getTickerButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Get Ticker (Requires Market Input)"/>
+            <Button
+                android:id="@+id/getMarketSummariesButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Get Market Summaries"/>
+            <Button
+                android:id="@+id/getMarketSummaryButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Get Market Summary (Requires Market Input)"/>
+            <Button
+                android:id="@+id/getOrderBookButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Get Order Book (Requires Market/Type Input)"/>
+            <Button
+                android:id="@+id/getMarketHistoryButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Get Market History (Requires Market Input)"/>
+        </LinearLayout>
+    </ScrollView>
 
-        <EditText
-            android:id="@+id/exchangeService"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="text"
-            android:hint="Exchange Service"/>
-
-        <EditText
-            android:id="@+id/apiKey"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="text"
-            android:hint="API Key" />
-
-        <EditText
-            android:id="@+id/apiSecret"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="text"
-            android:hint="API Secret"/>
-
-        <Button
-            android:id="@+id/submitApiDetails"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Submit API Details"
-            android:textAlignment="center"/>
-        <EditText
-            android:id="@+id/exchangeServiceInput"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="text"
-            android:hint="Exchange Service"/>
-        <Button
-            android:id="@+id/getApiDetails"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Get API Details"/>
-        <TextView
-            android:id="@+id/apiDetailsText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-    </LinearLayout>
 </android.support.constraint.ConstraintLayout>
