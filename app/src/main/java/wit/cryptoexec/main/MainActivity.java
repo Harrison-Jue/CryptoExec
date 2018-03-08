@@ -1,140 +1,106 @@
 package wit.cryptoexec.main;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.loopj.android.http.AsyncHttpResponseHandler;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 
-import cz.msebera.android.httpclient.Header;
 import wit.cryptoexec.R;
-import wit.cryptoexec.backend.api.public_api.BittrexPublicApiCallback;
+import wit.cryptoexec.add_exchange.AddExchangeActivity;
+import wit.cryptoexec.backend.api.callbacks.ApiExchangesHandler;
+import wit.cryptoexec.backend.api.callbacks.JSONArrayResponseHandler;
+import wit.cryptoexec.backend.api.callbacks.JSONObjectResponseHandler;
 import wit.cryptoexec.backend.api.public_api.BittrexPublicApiUsage;
+import wit.cryptoexec.backend.database.ApiDetailsDatabase;
 
 public class MainActivity extends AppCompatActivity {
-    private TextView restCall;
-    private EditText market;
-    private EditText type;
-    private Button getMarkets;
-    private Button getCurrencies;
-    private Button getTicker;
-    private Button getMarketSummaries;
-    private Button getMarketSummary;
-    private Button getOrderBook;
-    private Button getMarketHistory;
 
-    private BittrexPublicApiUsage publicClient;
+    private ApiDetailsDatabase apiDetailsDatabase;
+
+    private LinearLayout exchangesLayout;
+    private FloatingActionButton addExchanges;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        restCall = findViewById(R.id.restCall);
-        market = findViewById(R.id.market);
-        type = findViewById(R.id.type);
-        getMarkets = findViewById(R.id.getMarketsButton);
-        getCurrencies = findViewById(R.id.getCurrenciesButton);
-        getTicker = findViewById(R.id.getTickerButton);
-        getMarketSummaries = findViewById(R.id.getMarketSummariesButton);
-        getMarketSummary = findViewById(R.id.getMarketSummaryButton);
-        getOrderBook = findViewById(R.id.getOrderBookButton);
-        getMarketHistory = findViewById(R.id.getMarketHistoryButton);
+        apiDetailsDatabase = new ApiDetailsDatabase();
 
-        publicClient = new BittrexPublicApiUsage();
+        exchangesLayout = findViewById(R.id.exchangesLayout);
 
-        getMarkets.setOnClickListener(new View.OnClickListener() {
+        addExchanges = findViewById(R.id.addExchange);
+
+        addExchanges.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                publicClient.getMarkets(new BittrexPublicApiCallback() {
-                    @Override
-                    public void onSuccess(String response) {
-                        restCall.setText(response);
-                    }
-                });
+                Intent intent = new Intent(getApplicationContext(), AddExchangeActivity.class);
+                startActivity(intent);
             }
         });
 
-        getCurrencies.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                publicClient.getCurrencies(new BittrexPublicApiCallback() {
-                    @Override
-                    public void onSuccess(String response) {
-                        restCall.setText(response);
-                    }
-                });
-            }
-        });
 
-        getTicker.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String marketString = market.getText().toString();
-                publicClient.getTicker(marketString, new BittrexPublicApiCallback() {
-                    @Override
-                    public void onSuccess(String response) {
-                        restCall.setText(response);
+        try {
+            apiDetailsDatabase.getExchanges(new ApiExchangesHandler() {
+                @Override
+                public void onSucess(ArrayList<String> response) {
+                    if(!response.isEmpty()) {
+                        for (String exchange : response) {
+                            exchangesLayout.addView(createCardView(exchange));
+                        }
+                    } else {
+                        exchangesLayout.addView(noExchangesMessage());
                     }
-                });
-            }
-        });
+                }
+            });
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
+    }
 
-        getMarketSummaries.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                publicClient.getMarketSummaries(new BittrexPublicApiCallback() {
-                    @Override
-                    public void onSuccess(String response) {
-                        restCall.setText(response);
-                    }
-                });
-            }
-        });
+    private TextView noExchangesMessage() {
+        TextView exchangeText = new TextView(getApplicationContext());
+        exchangeText.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        exchangeText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        exchangeText.setText("No Exchanges under this Account");
 
-        getMarketSummary.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String marketString = market.getText().toString();
-                publicClient.getMarketSummary(marketString, new BittrexPublicApiCallback() {
-                    @Override
-                    public void onSuccess(String response) {
-                        restCall.setText(response);
-                    }
-                });
-            }
-        });
+        return exchangeText;
+    }
 
-        getOrderBook.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String marketString = market.getText().toString();
-                String typeString = type.getText().toString();
-                publicClient.getOrderBook(marketString, typeString, new BittrexPublicApiCallback() {
-                    @Override
-                    public void onSuccess(String response) {
-                        restCall.setText(response);
-                    }
-                });
-            }
-        });
+    private CardView createCardView(String exchangeString) {
+        CardView cardView = new CardView(getApplicationContext());
 
-        getMarketHistory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String marketString = market.getText().toString();
-                publicClient.getMarketHistory(marketString, new BittrexPublicApiCallback() {
-                    @Override
-                    public void onSuccess(String response) {
-                        restCall.setText(response);
-                    }
-                });
-            }
-        });
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        layoutParams.setMargins(20, 20, 0, 0);
+        cardView.setLayoutParams(layoutParams);
+
+        cardView.setRadius(30);
+
+        cardView.setContentPadding(15, 15, 15, 15);
+
+        cardView.setMaxCardElevation(15);
+
+        cardView.setCardElevation(9);
+
+        TextView exchangeText = new TextView(getApplicationContext());
+        exchangeText.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        exchangeText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        exchangeText.setText(exchangeString);
+
+        cardView.addView(exchangeText);
+
+        return cardView;
     }
 }

@@ -1,70 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="wit.cryptoexec.main.MainActivity">
-
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <LinearLayout
-            android:orientation="vertical"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Exchanges"
+            android:textSize="40dp"
+            android:textAlignment="center"/>
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <TextView
-                android:id="@+id/restCall"
+            <LinearLayout
+                android:id="@+id/exchangesLayout"
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:maxLines="100"
-                android:scrollbars="vertical" />
-            <EditText
-                android:id="@+id/market"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Market"/>
-            <EditText
-                android:id="@+id/type"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Type"/>
-            <Button
-                android:id="@+id/getMarketsButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Get Markets"/>
-            <Button
-                android:id="@+id/getCurrenciesButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Get Currencies"/>
-            <Button
-                android:id="@+id/getTickerButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Get Ticker (Requires Market Input)"/>
-            <Button
-                android:id="@+id/getMarketSummariesButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Get Market Summaries"/>
-            <Button
-                android:id="@+id/getMarketSummaryButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Get Market Summary (Requires Market Input)"/>
-            <Button
-                android:id="@+id/getOrderBookButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Get Order Book (Requires Market/Type Input)"/>
-            <Button
-                android:id="@+id/getMarketHistoryButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Get Market History (Requires Market Input)"/>
-        </LinearLayout>
-    </ScrollView>
+                android:layout_height="match_parent"/>
+        </ScrollView>
+    </LinearLayout>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/addExchange"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:backgroundTint="@android:color/holo_red_light"
+        android:src="@android:drawable/ic_input_add"/>
 
-</android.support.constraint.ConstraintLayout>
+</RelativeLayout>

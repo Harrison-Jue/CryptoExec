@@ -15,6 +15,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+
+import wit.cryptoexec.backend.api.callbacks.ApiDetailsHandler;
+import wit.cryptoexec.backend.api.callbacks.ApiExchangesHandler;
+import wit.cryptoexec.backend.api.callbacks.ApiKeyHandler;
+import wit.cryptoexec.backend.api.callbacks.ApiSecretHandler;
+
 /**
  * Created by jueh on 3/5/2018.
  */
@@ -31,7 +39,7 @@ public class ApiDetailsDatabase {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String uid = user.getUid();
 
-        String referenceString = "users/" + uid + "apiDetails";
+        String referenceString = "users/" + uid + "/apiDetails";
         reference = database.getReference(referenceString);
     }
 
@@ -82,39 +90,63 @@ public class ApiDetailsDatabase {
         reference.child(exchangeService).removeValue();
     }
 
-    public Task<String> getApiKey(String exchangeService) throws Throwable {
-        final TaskCompletionSource<String> tcs = new TaskCompletionSource<>();
-        final String innerExchangeService = exchangeService; //Workaround to make parameter not final? Probably doesn't not affect result
+    public void getApiKey(final String exchangeService, final ApiKeyHandler callback) throws Throwable {
         reference.child(exchangeService).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                tcs.setResult(dataSnapshot.child("apiKey").getValue(String.class));
+                callback.onSuccess(dataSnapshot.child("apiKey").getValue(String.class));
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Log.v(ERROR, "Could not find API Key from Exchange Service \"" + innerExchangeService + "\": " + databaseError.getMessage());
+                Log.v(ERROR, "Could not find API Key from Exchange Service \"" + exchangeService + "\": " + databaseError.getMessage());
             }
         });
-
-        return tcs.getTask();
     }
 
-    public Task<String> getApiSecret(String exchangeService) throws Throwable {
-        final TaskCompletionSource<String> tcs = new TaskCompletionSource<String>();
-        final String innerExchangeService = exchangeService; //Workaround to make parameter not final? Probably doesn't not affect result
+    public void getApiSecret(final String exchangeService, final ApiSecretHandler callback) throws Throwable {
         reference.child(exchangeService).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                tcs.setResult(dataSnapshot.child("apiSecret").getValue(String.class));
+                callback.onSuccess(dataSnapshot.child("apiSecret").getValue(String.class));
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Log.v(ERROR, "Could not find API Secret from Exchange Service \"" + innerExchangeService + "\": " + databaseError.getMessage());
+                Log.v(ERROR, "Could not find API Secret from Exchange Service \"" + exchangeService + "\": " + databaseError.getMessage());
             }
         });
+    }
 
-        return tcs.getTask();
+    public void getApiDetails(final String exchangeService, final ApiDetailsHandler callback) throws Throwable {
+        reference.child(exchangeService).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                callback.onSuccess(dataSnapshot.child("apiKey").getValue(String.class), dataSnapshot.child("apiSecret").getValue().toString());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.v(ERROR, "Could not find API Key/Secret from Exchange Service \"" + exchangeService + "\": " + databaseError.getMessage());
+            }
+        });
+    }
+
+    public void getExchanges(final ApiExchangesHandler callback) throws Throwable {
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                ArrayList<String> exchanges = new ArrayList<>();
+                for(DataSnapshot child : dataSnapshot.getChildren()) {
+                    exchanges.add(child.getKey());
+                }
+                callback.onSucess(exchanges);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.v(ERROR, "Could not find Exchanges for user \"" + FirebaseAuth.getInstance().getCurrentUser().getUid().toString() + "\": " + databaseError.getMessage());
+            }
+        });
     }
 }

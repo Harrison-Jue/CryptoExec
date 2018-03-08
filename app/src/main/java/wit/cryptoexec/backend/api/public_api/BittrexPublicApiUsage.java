@@ -1,15 +1,16 @@
 package wit.cryptoexec.backend.api.public_api;
 
 import android.util.Log;
-import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
-import java.util.Arrays;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import cz.msebera.android.httpclient.Header;
-import wit.cryptoexec.main.MainActivity;
+import wit.cryptoexec.backend.api.callbacks.JSONArrayResponseHandler;
+import wit.cryptoexec.backend.api.callbacks.JSONObjectResponseHandler;
 
 /**
  * Created by jueh on 3/7/2018.
@@ -18,14 +19,23 @@ import wit.cryptoexec.main.MainActivity;
 public class BittrexPublicApiUsage {
     private String ERROR = "ERROR";
 
-    BittrexPublicApiClient client = new BittrexPublicApiClient();
+    private BittrexPublicApiClient client = new BittrexPublicApiClient();
 
-    public void getMarkets(final BittrexPublicApiCallback callback) {
+    public void getMarkets(final JSONArrayResponseHandler callback) {
         client.get("getmarkets", null, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 String response = new String(responseBody);
-                callback.onSuccess(response);
+                try {
+                    JSONObject responseJson = new JSONObject(response);
+                    if(responseJson.getBoolean("success")) {
+                        callback.onSuccess(responseJson.getJSONArray("result"));
+                    } else {
+                        throw new Error(String.format("success: %s", Boolean.toString(responseJson.getBoolean("success"))));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -35,12 +45,21 @@ public class BittrexPublicApiUsage {
         });
     }
 
-    public void getCurrencies(final BittrexPublicApiCallback callback) {
+    public void getCurrencies(final JSONArrayResponseHandler callback) {
         client.get("getcurrencies", null, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 String response = new String(responseBody);
-                callback.onSuccess(response);
+                try {
+                    JSONObject responseJson = new JSONObject(response);
+                    if(responseJson.getBoolean("success")) {
+                        callback.onSuccess(responseJson.getJSONArray("result"));
+                    } else {
+                        throw new Error(String.format("success: %s", Boolean.toString(responseJson.getBoolean("success"))));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -51,14 +70,23 @@ public class BittrexPublicApiUsage {
     }
 
     //Market is the type of Coin to look at
-    public void getTicker(String market, final BittrexPublicApiCallback callback) {
+    public void getTicker(String market, final JSONObjectResponseHandler callback) {
         RequestParams params = new RequestParams();
         params.add("market", market);
         client.get("getticker", params, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 String response = new String(responseBody);
-                callback.onSuccess(response);
+                try {
+                    JSONObject responseJson = new JSONObject(response);
+                    if(responseJson.getBoolean("success")) {
+                        callback.onSuccess(responseJson.getJSONObject("result"));
+                    } else {
+                        throw new Error(String.format("success: %s", Boolean.toString(responseJson.getBoolean("success"))));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -68,12 +96,21 @@ public class BittrexPublicApiUsage {
         });
     }
 
-    public void getMarketSummaries(final BittrexPublicApiCallback callback) {
+    public void getMarketSummaries(final JSONArrayResponseHandler callback) {
         client.get("getmarketsummaries", null, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 String response = new String(responseBody);
-                callback.onSuccess(response);
+                try {
+                    JSONObject responseJson = new JSONObject(response);
+                    if(responseJson.getBoolean("success")) {
+                        callback.onSuccess(responseJson.getJSONArray("result"));
+                    } else {
+                        throw new Error(String.format("success: %s", Boolean.toString(responseJson.getBoolean("success"))));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -83,14 +120,23 @@ public class BittrexPublicApiUsage {
         });
     }
 
-    public void getMarketSummary(String market, final BittrexPublicApiCallback callback) {
+    public void getMarketSummary(String market, final JSONArrayResponseHandler callback) {
         RequestParams params = new RequestParams();
         params.add("market", market);
         client.get("getmarketsummary", params, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 String response = new String(responseBody);
-                callback.onSuccess(response);
+                try {
+                    JSONObject responseJson = new JSONObject(response);
+                    if(responseJson.getBoolean("success")) {
+                        callback.onSuccess(responseJson.getJSONArray("result"));
+                    } else {
+                        throw new Error(String.format("success: %s", Boolean.toString(responseJson.getBoolean("success"))));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -100,7 +146,7 @@ public class BittrexPublicApiUsage {
         });
     }
 
-    public void getOrderBook(String market, String type, final BittrexPublicApiCallback callback) {
+    public void getOrderBook(String market, String type, final JSONObjectResponseHandler callback) {
         RequestParams params = new RequestParams();
         params.add("market", market);
         params.add("type", type);
@@ -108,7 +154,16 @@ public class BittrexPublicApiUsage {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 String response = new String(responseBody);
-                callback.onSuccess(response);
+                try {
+                    JSONObject responseJson = new JSONObject(response);
+                    if(responseJson.getBoolean("success")) {
+                        callback.onSuccess(responseJson.getJSONObject("result"));
+                    } else {
+                        throw new Error(String.format("success: %s", Boolean.toString(responseJson.getBoolean("success"))));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -118,14 +173,23 @@ public class BittrexPublicApiUsage {
         });
     }
 
-    public void getMarketHistory(String market, final BittrexPublicApiCallback callback) {
+    public void getMarketHistory(String market, final JSONArrayResponseHandler callback) {
         RequestParams params = new RequestParams();
         params.add("market", market);
         client.get("getmarkethistory", params, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 String response = new String(responseBody);
-                callback.onSuccess(response);
+                try {
+                    JSONObject responseJson = new JSONObject(response);
+                    if(responseJson.getBoolean("success")) {
+                        callback.onSuccess(responseJson.getJSONArray("result"));
+                    } else {
+                        throw new Error(String.format("success: %s", Boolean.toString(responseJson.getBoolean("success"))));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
