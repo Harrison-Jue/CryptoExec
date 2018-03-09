@@ -1,30 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <TextView
-        android:layout_width="80dip"
-        android:layout_height="80dip"
-        android:id="@+id/symbol"/>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:baselineAligned="false"
+    android:orientation="horizontal"
+    android:weightSum="3">
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
         android:paddingLeft="10dp"
-        android:paddingTop="5dp"
-        android:orientation="vertical">
+        android:paddingRight="10dp"
+        android:paddingTop="5dp">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:id="@+id/symbol"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/fullname"
-            android:textStyle="bold"
-            android:textSize="18sp"/>
+            android:textAlignment="textStart"
+            android:textSize="22sp" />
+
         <TextView
-            android:layout_width="wrap_content"
+            android:id="@+id/fullname"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textAlignment="textStart"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="5dp">
+
+        <TextView
             android:id="@+id/change_24hr"
-            android:textSize="18sp"/>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autoText="false"
+            android:gravity="center"
+            android:textAlignment="center"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="5dp">
+
+        <TextView
+            android:id="@+id/price_USD"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="textEnd"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/price_BTC"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="textEnd"
+            android:textSize="20sp" />
     </LinearLayout>
 
 </LinearLayout>

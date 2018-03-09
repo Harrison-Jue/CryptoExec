@@ -72,7 +72,6 @@ public class CoinMarketCapAdapter extends Fragment
         public coinMarketCapData(Activity context,ListView listView) {
             this.listView=listView;
             this.context=context;
-            Log.v("Test", "HERE1");
             doInBackground();
         }
 
@@ -83,7 +82,7 @@ public class CoinMarketCapAdapter extends Fragment
             Runnable runnable = new Runnable() {
                 @Override
                 public void run() {
-                    client.ticker("0", "10", CoinMarketApiUsage.NO_VALUE, new JSONArrayResponseHandler() {
+                    client.ticker("0", "50", CoinMarketApiUsage.NO_VALUE, new JSONArrayResponseHandler() {
                         @Override
                         public void onSuccess(JSONArray response) {
                             try {

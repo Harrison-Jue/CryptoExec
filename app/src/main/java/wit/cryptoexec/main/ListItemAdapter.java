@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 import wit.cryptoexec.R;
@@ -30,9 +31,11 @@ public class ListItemAdapter extends ArrayAdapter<CryptoInfo> {
         CryptoInfo item = (CryptoInfo)getItem(position);
         View view = mInflater.inflate(R.layout.crypto_item, null);
 
+        DecimalFormat df = new DecimalFormat();
+        df.setMaximumFractionDigits(4);
+
         TextView symbol;
         symbol = (TextView)view.findViewById(R.id.symbol);
-        Log.v("Symbol", item.symbol);
         symbol.setText(item.symbol);
 
         TextView fullName;
@@ -41,7 +44,15 @@ public class ListItemAdapter extends ArrayAdapter<CryptoInfo> {
 
         TextView change_24hr;
         change_24hr = (TextView)view.findViewById(R.id.change_24hr);
-        change_24hr.setText(item.name);
+        change_24hr.setText(item.percent_change_24h.toString() +"%");
+
+        TextView priceUSD;
+        priceUSD = (TextView)view.findViewById(R.id.price_USD);
+        priceUSD.setText("$" + String.valueOf(df.format(item.price_usd)));
+
+        TextView priceBTC;
+        priceBTC = (TextView)view.findViewById(R.id.price_BTC);
+        priceBTC.setText(String.valueOf(df.format(item.price_btc)) + " BTC");
 
         return view;
     }
