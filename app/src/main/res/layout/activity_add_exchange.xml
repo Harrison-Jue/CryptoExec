@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="wit.cryptoexec.exchange.AddExchangeActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:paddingTop="50dp"
+            android:paddingBottom="50dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:textSize="40dp"
+            android:text="Add Exchange"/>
+
+        <Spinner
+            android:id="@+id/exchangeOptions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:id="@+id/apiKey"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="text"
+            android:hint="API Key" />
+
+        <EditText
+            android:id="@+id/apiSecret"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="text"
+            android:hint="API Secret"/>
+
+        <Button
+            android:id="@+id/submitApiDetails"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Submit API Details"
+            android:textAlignment="center"/>
+
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>
