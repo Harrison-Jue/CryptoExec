@@ -1,4 +1,4 @@
-package wit.cryptoexec.backend.api.market_api;
+package wit.cryptoexec.backend.api.coinmarket;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -8,8 +8,8 @@ import com.loopj.android.http.RequestParams;
  * Created by jueh on 3/7/2018.
  */
 
-public class BittrexMarketApiClient {
-    private static final String BASE_URL = "https://bittrex.com/api/v1.1/market/";
+public class CoinMarketApiClient {
+    private static final String BASE_URL = "https://api.coinmarketcap.com/v1/";
 
     private static AsyncHttpClient client = new AsyncHttpClient();
 

@@ -1,4 +1,4 @@
-package wit.cryptoexec.backend.api.market_api;
+package wit.cryptoexec.backend.api.bittrex.market_api;
 
 import android.util.Log;
 
@@ -12,7 +12,6 @@ import cz.msebera.android.httpclient.Header;
 import wit.cryptoexec.backend.api.callbacks.ApiKeyHandler;
 import wit.cryptoexec.backend.api.callbacks.BooleanResponseHandler;
 import wit.cryptoexec.backend.api.callbacks.JSONArrayResponseHandler;
-import wit.cryptoexec.backend.api.callbacks.JSONObjectResponseHandler;
 import wit.cryptoexec.backend.database.ApiDetailsDatabase;
 
 /**

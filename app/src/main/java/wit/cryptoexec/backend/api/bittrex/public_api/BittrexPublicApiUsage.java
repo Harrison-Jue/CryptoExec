@@ -1,4 +1,4 @@
-package wit.cryptoexec.backend.api.public_api;
+package wit.cryptoexec.backend.api.bittrex.public_api;
 
 import android.util.Log;
 

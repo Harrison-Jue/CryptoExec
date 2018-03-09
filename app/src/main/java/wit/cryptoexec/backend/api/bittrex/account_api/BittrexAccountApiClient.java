@@ -1,20 +1,15 @@
-package wit.cryptoexec.backend.api.public_api;
-
-import android.os.AsyncTask;
+package wit.cryptoexec.backend.api.bittrex.account_api;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
-import java.net.HttpURLConnection;
-import java.net.URL;
-
 /**
  * Created by jueh on 3/7/2018.
  */
 
-public class BittrexPublicApiClient {
-    private static final String BASE_URL = "https://bittrex.com/api/v1.1/public/";
+public class BittrexAccountApiClient {
+    private static final String BASE_URL = "https://bittrex.com/api/v1.1/account/";
 
     private static AsyncHttpClient client = new AsyncHttpClient();
 

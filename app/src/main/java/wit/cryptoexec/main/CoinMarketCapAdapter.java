@@ -1,6 +1,7 @@
 package wit.cryptoexec.main;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -10,6 +11,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,17 +29,27 @@ import java.util.List;
 import javax.net.ssl.HttpsURLConnection;
 
 import wit.cryptoexec.R;
+import wit.cryptoexec.backend.api.callbacks.JSONArrayResponseHandler;
+import wit.cryptoexec.backend.api.coinmarket.CoinMarketApiClient;
+import wit.cryptoexec.backend.api.coinmarket.CoinMarketApiUsage;
 
 /**
  * Created by kayya on 3/8/2018.
  */
 
-public class CoinMarketCapAdapter extends Fragment {
-    ListView listView;
+public class CoinMarketCapAdapter extends Fragment
+{
+    private ListView listView;
+
+    private CoinMarketApiUsage client;
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 //        super.onCreateView(inflater, container, savedInstanceState);
         Log.v("Test", "HERE");
+
+        client = new CoinMarketApiUsage();
+
         View lv = inflater.inflate(R.layout.coinmarketcaplist, null);
         listView = (ListView) lv.findViewById(R.id.cryptomarketcap_listview);
         bindListView();
@@ -52,8 +67,7 @@ public class CoinMarketCapAdapter extends Fragment {
         ListView listView;
         Activity context;
 
-        public  coinMarketCapData(Activity context,ListView listView)
-        {
+        public coinMarketCapData(Activity context,ListView listView) {
             this.listView=listView;
             this.context=context;
             Log.v("Test", "HERE1");
@@ -65,35 +79,17 @@ public class CoinMarketCapAdapter extends Fragment {
             AsyncTask.execute(new Runnable() {
                 @Override
                 public void run() {
-                    Log.v("Test", "HERE2");
-
-                    try {
-                        URL API_URL = new URL("https://api.coinmarketcap.com/v1/ticker/?start=0&limit=10");
-                        HttpsURLConnection myConnection =
-                                (HttpsURLConnection) API_URL.openConnection();
-                        myConnection.setRequestProperty("User-Agent", "cryptoexec-V1");
-                        myConnection.setRequestProperty("Accept",
-                                "application/json");
-                        if (myConnection.getResponseCode() == 200) {
-                            InputStream responseBody = myConnection.getInputStream();
-                            InputStreamReader responseBodyReader =
-                                    new InputStreamReader(responseBody, "UTF-8");
-                            JsonReader jsonReader = new JsonReader(responseBodyReader);
-                            jsonReader.beginArray(); // Start processing the JSON object
-                            while (jsonReader.hasNext()) { // Loop through all keys
-                                cryptoArr.add(parseJSONArray(jsonReader));
+                    //Use client Java to handle the api call
+                    client.ticker("0", "10", CoinMarketApiUsage.NO_VALUE, new JSONArrayResponseHandler() {
+                        @Override
+                        public void onSuccess(JSONArray response) {
+                            try {
+                                parseJSONArray(response);
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
-                            Log.v("CryptoArr", cryptoArr.toString());
-                            jsonReader.close();
-                            myConnection.disconnect();
-                        } else {
-                            // Error handling code goes here
                         }
-                    } catch (MalformedURLException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    });
                 }
             });
             return 1;
@@ -109,49 +105,32 @@ public class CoinMarketCapAdapter extends Fragment {
         }
 
 
-        private CryptoInfo parseJSONArray(JsonReader reader) throws IOException {
-            CryptoInfo crypto = new CryptoInfo();
+        private void parseJSONArray(JSONArray jsonArray) throws Exception {
+            for(int i = 0; i < jsonArray.length(); i++) {
+                //Get JSONObject from JSONArray
+                JSONObject result = jsonArray.getJSONObject(i);
 
-            reader.beginObject();
-            while (reader.hasNext()) {
-                String keyName = reader.nextName();
-                if (keyName.equals("id")) {
-                    crypto.id = reader.nextString();
-                } else if (keyName.equals("name")) {
-                    crypto.name = reader.nextString();
-                } else if (keyName.equals("symbol")) {
-                    crypto.symbol = reader.nextString();
-                } else if (keyName.equals("rank")) {
-                    crypto.rank = Integer.parseInt(reader.nextString());
-                } else if (keyName.equals("price_usd")) {
-                    crypto.price_usd = Float.parseFloat(reader.nextString());
-                } else if (keyName.equals("price_btc")) {
-                    crypto.price_btc = Float.parseFloat(reader.nextString());
-                } else if (keyName.equals("usd_volume_24_hr")) {
-                    crypto.usd_volume_24_hr = Float.parseFloat(reader.nextString());
-                } else if (keyName.equals("market_cap_usd")) {
-                    crypto.market_cap_usd = new BigDecimal(reader.nextString());
-                } else if (keyName.equals("availableSupply")) {
-                    crypto.availableSupply = new BigDecimal(reader.nextString());
-                } else if (keyName.equals("totalSupply")) {
-                    crypto.totalSupply = new BigDecimal(reader.nextString());
-                } else if (keyName.equals("maxSupply")) {
-                    crypto.maxSupply = new BigDecimal(reader.nextString());
-                } else if (keyName.equals("percent_change_1h")) {
-                    crypto.percent_change_1h = Double.parseDouble(reader.nextString());
-                } else if (keyName.equals("percent_change_24h")) {
-                    crypto.percent_change_24h = Double.parseDouble(reader.nextString());
-                } else if (keyName.equals("percent_change_7d")) {
-                    crypto.percent_change_7d = Double.parseDouble(reader.nextString());
-                } else if (keyName.equals("last_updated")) {
-                    crypto.last_updated = new BigInteger(reader.nextString());
-                } else {
-                    reader.skipValue();
-                }
+                //Initialize and set values
+                CryptoInfo crypto = new CryptoInfo();
+                crypto.id = result.getString("id");
+                crypto.name = result.getString("name");
+                crypto.symbol = result.getString("symbol");
+                crypto.rank = Integer.parseInt(result.getString("rank"));
+                crypto.price_usd = Float.parseFloat(result.getString("price_usd"));
+                crypto.price_btc = Float.parseFloat(result.getString("price_btc"));
+                crypto.usd_volume_24_hr = Float.parseFloat(result.getString("usd_volume_24_hr"));
+                crypto.market_cap_usd = new BigDecimal(result.getString("market_cap_usd"));
+                crypto.available_supply = new BigDecimal(result.getString("available_supply"));
+                crypto.total_supply = new BigDecimal(result.getString("total_supply"));
+                crypto.max_supply = new BigDecimal(result.getString("max_supply"));
+                crypto.percent_change_1h = Double.parseDouble(result.getString("percent_change_1h"));
+                crypto.percent_change_24h = Double.parseDouble(result.getString("percent_change_24h"));
+                crypto.percent_change_7d = Double.parseDouble(result.getString("percent_change_7d"));
+                crypto.last_updated = new BigInteger(result.getString("last_updated"));
 
+                //Add to Crypto Array
+                cryptoArr.add(crypto);
             }
-            reader.endObject();
-            return crypto;
         }
     }
 }

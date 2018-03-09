@@ -16,9 +16,9 @@ public class CryptoInfo {
     public float price_btc;
     public float usd_volume_24_hr;
     public BigDecimal market_cap_usd;
-    public BigDecimal availableSupply;
-    public  BigDecimal totalSupply;
-    public BigDecimal maxSupply;
+    public BigDecimal available_supply;
+    public  BigDecimal total_supply;
+    public BigDecimal max_supply;
     public Double percent_change_1h;
     public Double percent_change_24h;
     public Double percent_change_7d;
