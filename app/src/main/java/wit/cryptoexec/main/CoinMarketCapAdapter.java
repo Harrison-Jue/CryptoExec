@@ -2,6 +2,8 @@ package wit.cryptoexec.main;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.app.Fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -76,34 +78,30 @@ public class CoinMarketCapAdapter extends Fragment
 
         @Override
         protected Integer doInBackground(Void... voids) {
-            AsyncTask.execute(new Runnable() {
+            //Use client Java to handle the api call
+            Handler handler = new Handler(Looper.getMainLooper());
+            Runnable runnable = new Runnable() {
                 @Override
                 public void run() {
-                    //Use client Java to handle the api call
                     client.ticker("0", "10", CoinMarketApiUsage.NO_VALUE, new JSONArrayResponseHandler() {
                         @Override
                         public void onSuccess(JSONArray response) {
                             try {
                                 parseJSONArray(response);
+                                ListItemAdapter adapter = new ListItemAdapter(context, 0, cryptoArr);
+                                listView.setAdapter(adapter);
+                                adapter.notifyDataSetChanged();
+
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
                         }
                     });
                 }
-            });
+            };
+            handler.post(runnable);
             return 1;
         }
-
-        protected void onPostExecute(Integer result) {
-            ListItemAdapter adapter;
-            adapter = new ListItemAdapter(context, 0, cryptoArr);
-            listView.setAdapter(adapter);
-            adapter.notifyDataSetChanged();
-            Log.v("Test", "HERE3");
-
-        }
-
 
         private void parseJSONArray(JSONArray jsonArray) throws Exception {
             for(int i = 0; i < jsonArray.length(); i++) {
@@ -118,11 +116,13 @@ public class CoinMarketCapAdapter extends Fragment
                 crypto.rank = Integer.parseInt(result.getString("rank"));
                 crypto.price_usd = Float.parseFloat(result.getString("price_usd"));
                 crypto.price_btc = Float.parseFloat(result.getString("price_btc"));
-                crypto.usd_volume_24_hr = Float.parseFloat(result.getString("usd_volume_24_hr"));
+                crypto.usd_volume_24_hr = Float.parseFloat(result.getString("24h_volume_usd"));
                 crypto.market_cap_usd = new BigDecimal(result.getString("market_cap_usd"));
                 crypto.available_supply = new BigDecimal(result.getString("available_supply"));
                 crypto.total_supply = new BigDecimal(result.getString("total_supply"));
-                crypto.max_supply = new BigDecimal(result.getString("max_supply"));
+                if(!result.isNull("max_supply")) {
+                    crypto.max_supply = new BigDecimal(result.getString("max_supply"));
+                }
                 crypto.percent_change_1h = Double.parseDouble(result.getString("percent_change_1h"));
                 crypto.percent_change_24h = Double.parseDouble(result.getString("percent_change_24h"));
                 crypto.percent_change_7d = Double.parseDouble(result.getString("percent_change_7d"));
@@ -130,6 +130,8 @@ public class CoinMarketCapAdapter extends Fragment
 
                 //Add to Crypto Array
                 cryptoArr.add(crypto);
+
+                Log.v("parseJSONArray", cryptoArr.toString());
             }
         }
     }

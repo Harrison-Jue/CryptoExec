@@ -18,6 +18,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 import wit.cryptoexec.exchange.ExchangesActivity;
 import wit.cryptoexec.R;
+import wit.cryptoexec.main.MainActivity;
 
 public class LogInActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
@@ -117,7 +118,7 @@ public class LogInActivity extends AppCompatActivity {
     }
 
     public void goToMain() {
-        Intent myIntent = new Intent(this, ExchangesActivity.class);
+        Intent myIntent = new Intent(this, MainActivity.class);
         startActivity(myIntent);
     }
 

@@ -5,6 +5,7 @@ import android.util.Log;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -47,12 +48,7 @@ public class CoinMarketApiUsage {
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 String response = new String(responseBody);
                 try {
-                    JSONObject responseJson = new JSONObject(response);
-                    if (responseJson.getBoolean("success")) {
-                        callback.onSuccess(responseJson.getJSONArray("result"));
-                    } else {
-                        throw new Error(String.format("success: %s", Boolean.toString(responseJson.getBoolean("success"))));
-                    }
+                    callback.onSuccess(new JSONArray(response));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
