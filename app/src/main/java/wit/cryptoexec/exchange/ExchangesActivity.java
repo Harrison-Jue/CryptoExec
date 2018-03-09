@@ -1,31 +1,21 @@
-package wit.cryptoexec.main;
+package wit.cryptoexec.exchange;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
 import wit.cryptoexec.R;
-import wit.cryptoexec.add_exchange.AddExchangeActivity;
 import wit.cryptoexec.backend.api.callbacks.ApiExchangesHandler;
-import wit.cryptoexec.backend.api.callbacks.JSONArrayResponseHandler;
-import wit.cryptoexec.backend.api.callbacks.JSONObjectResponseHandler;
-import wit.cryptoexec.backend.api.public_api.BittrexPublicApiUsage;
 import wit.cryptoexec.backend.database.ApiDetailsDatabase;
 
-public class MainActivity extends AppCompatActivity {
+public class ExchangesActivity extends AppCompatActivity {
 
     private ApiDetailsDatabase apiDetailsDatabase;
 
@@ -35,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_exchanges);
 
         apiDetailsDatabase = new ApiDetailsDatabase();
 

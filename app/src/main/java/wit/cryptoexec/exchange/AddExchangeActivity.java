@@ -1,4 +1,4 @@
-package wit.cryptoexec.add_exchange;
+package wit.cryptoexec.exchange;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,16 +10,10 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import wit.cryptoexec.R;
-import wit.cryptoexec.backend.api.callbacks.ApiDetailsHandler;
 import wit.cryptoexec.backend.database.ApiDetailsDatabase;
-import wit.cryptoexec.main.MainActivity;
 
 public class AddExchangeActivity extends AppCompatActivity {
     private ApiDetailsDatabase apiDetailsDatabase;
@@ -80,11 +74,11 @@ public class AddExchangeActivity extends AppCompatActivity {
                     try {
                         if (apiDetailsDatabase.saveApiDetails(exchangeService, apiKey, apiSecret)) {
                             Log.v("Success", "Added Api Detail to Database");
-                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                            Intent intent = new Intent(getApplicationContext(), ExchangesActivity.class);
                             startActivity(intent);
                         } else {
                             Log.v("Failure", "Could not add Api Detail to Database");
-                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                            Intent intent = new Intent(getApplicationContext(), ExchangesActivity.class);
                             startActivity(intent);
                         }
                     } catch (Throwable throwable) {

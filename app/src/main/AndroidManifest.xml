@@ -18,7 +18,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".main.MainActivity" />
-        <activity android:name=".add_exchange.AddExchangeActivity" />
+        <activity android:name=".exchange.ExchangesActivity" />
+        <activity android:name=".exchange.AddExchangeActivity" />
     </application>
 
 </manifest>

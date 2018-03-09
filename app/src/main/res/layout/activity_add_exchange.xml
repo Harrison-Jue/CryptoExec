@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="wit.cryptoexec.add_exchange.AddExchangeActivity">
+    tools:context="wit.cryptoexec.exchange.AddExchangeActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
