@@ -6,7 +6,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -84,10 +86,23 @@ public class ExchangesActivity extends AppCompatActivity {
 
         cardView.setCardElevation(9);
 
+        RelativeLayout layout = new RelativeLayout(getApplicationContext());
+        layout.setLayoutParams(layoutParams);
+
         TextView exchangeText = new TextView(getApplicationContext());
-        exchangeText.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        RelativeLayout.LayoutParams relativeLayoutStart = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        relativeLayoutStart.addRule(RelativeLayout.ALIGN_PARENT_START);
+        exchangeText.setLayoutParams(relativeLayoutStart);
         exchangeText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         exchangeText.setText(exchangeString);
+        layout.addView(exchangeText);
+
+        Button deleteButton = new Button(getApplicationContext());
+        RelativeLayout.LayoutParams relativeLayoutEnd = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        relativeLayoutEnd.addRule(RelativeLayout.ALIGN_PARENT_END);
+        deleteButton.setLayoutParams(relativeLayoutEnd);
+        deleteButton.setText("Delete");
+        deleteButton.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
 
         cardView.addView(exchangeText);
 
