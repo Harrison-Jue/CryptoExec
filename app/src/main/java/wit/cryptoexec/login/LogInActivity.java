@@ -118,7 +118,7 @@ public class LogInActivity extends AppCompatActivity {
     }
 
     public void goToMain() {
-        Intent myIntent = new Intent(this, MainActivity.class);
+        Intent myIntent = new Intent(this, ExchangesActivity.class);
         startActivity(myIntent);
     }
 

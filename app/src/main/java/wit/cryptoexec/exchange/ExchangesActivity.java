@@ -71,7 +71,7 @@ public class ExchangesActivity extends AppCompatActivity {
         return exchangeText;
     }
 
-    private CardView createCardView(String exchangeString) {
+    private CardView createCardView(final String exchangeString) {
         CardView cardView = new CardView(getApplicationContext());
 
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -86,15 +86,19 @@ public class ExchangesActivity extends AppCompatActivity {
 
         cardView.setCardElevation(9);
 
+        cardView.setUseCompatPadding(true);
+
         RelativeLayout layout = new RelativeLayout(getApplicationContext());
         layout.setLayoutParams(layoutParams);
 
         TextView exchangeText = new TextView(getApplicationContext());
         RelativeLayout.LayoutParams relativeLayoutStart = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         relativeLayoutStart.addRule(RelativeLayout.ALIGN_PARENT_START);
+        relativeLayoutStart.addRule(RelativeLayout.CENTER_VERTICAL);
         exchangeText.setLayoutParams(relativeLayoutStart);
         exchangeText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         exchangeText.setText(exchangeString);
+        exchangeText.setTextSize(20);
         layout.addView(exchangeText);
 
         Button deleteButton = new Button(getApplicationContext());
@@ -103,8 +107,18 @@ public class ExchangesActivity extends AppCompatActivity {
         deleteButton.setLayoutParams(relativeLayoutEnd);
         deleteButton.setText("Delete");
         deleteButton.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                apiDetailsDatabase.deleteApiDetails(exchangeString);
+                finish();
+                Intent intent = new Intent(getApplicationContext(), ExchangesActivity.class);
+                startActivity(intent);
+            }
+        });
+        layout.addView(deleteButton);
 
-        cardView.addView(exchangeText);
+        cardView.addView(layout);
 
         return cardView;
     }
