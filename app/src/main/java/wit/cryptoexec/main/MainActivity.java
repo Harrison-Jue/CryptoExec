@@ -1,6 +1,7 @@
 package wit.cryptoexec.main;
 
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -12,14 +13,12 @@ import android.os.Bundle;
 
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.TextView;
 import android.support.v7.widget.Toolbar;
 
 import wit.cryptoexec.R;
-import wit.cryptoexec.backend.database.ApiDetailsDatabase;
+import wit.cryptoexec.exchange.AddExchangeActivity;
+import wit.cryptoexec.exchange.ExchangesActivity;
+import wit.cryptoexec.main.CMC_Home.CoinMarketCapAdapter;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -29,8 +28,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -51,7 +48,22 @@ public class MainActivity extends AppCompatActivity {
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                         item.setCheckable(true);
                         mDrawerLayout.closeDrawers();
-                        Log.v("ITEM", item.toString());
+                        int id = item.getItemId();
+                        Intent intent;
+                        switch (id) {
+                            case R.id.coinmarketcaphome:
+                                intent = new Intent(MainActivity.this, MainActivity.class);
+                                startActivity(intent);
+                                break;
+                            case R.id.addExchange:
+                                intent = new Intent(MainActivity.this, AddExchangeActivity.class);
+                                startActivity(intent);
+                                break;
+                            case R.id.Portfolio:
+                                intent = new Intent(MainActivity.this, ExchangesActivity.class);
+                                startActivity(intent);
+                                break;
+                        }
                         return false;
                     }
                 }
@@ -60,7 +72,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Log.v("HERE", item.toString());
         switch (item.getItemId()) {
             case android.R.id.home:
                 mDrawerLayout.openDrawer(GravityCompat.START);

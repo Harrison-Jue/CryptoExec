@@ -1,13 +1,11 @@
-package wit.cryptoexec.main;
+package wit.cryptoexec.main.CMC_Home;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.app.Fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.JsonReader;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,24 +13,15 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.net.ssl.HttpsURLConnection;
-
 import wit.cryptoexec.R;
 import wit.cryptoexec.backend.api.callbacks.JSONArrayResponseHandler;
-import wit.cryptoexec.backend.api.coinmarket.CoinMarketApiClient;
 import wit.cryptoexec.backend.api.coinmarket.CoinMarketApiUsage;
 
 /**
@@ -48,13 +37,13 @@ public class CoinMarketCapAdapter extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 //        super.onCreateView(inflater, container, savedInstanceState);
-        Log.v("Test", "HERE");
 
         client = new CoinMarketApiUsage();
 
         View lv = inflater.inflate(R.layout.coinmarketcaplist, null);
         listView = (ListView) lv.findViewById(R.id.cryptomarketcap_listview);
         bindListView();
+
         return lv;
         //return super.onCreateView(inflater, container, savedInstanceState);
     }

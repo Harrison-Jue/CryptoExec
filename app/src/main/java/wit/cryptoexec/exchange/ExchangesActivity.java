@@ -1,10 +1,18 @@
 package wit.cryptoexec.exchange;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -14,6 +22,8 @@ import java.util.ArrayList;
 import wit.cryptoexec.R;
 import wit.cryptoexec.backend.api.callbacks.ApiExchangesHandler;
 import wit.cryptoexec.backend.database.ApiDetailsDatabase;
+import wit.cryptoexec.main.CMC_Home.CoinMarketCapAdapter;
+import wit.cryptoexec.main.MainActivity;
 
 public class ExchangesActivity extends AppCompatActivity {
 
@@ -21,6 +31,8 @@ public class ExchangesActivity extends AppCompatActivity {
 
     private LinearLayout exchangesLayout;
     private FloatingActionButton addExchanges;
+
+    private DrawerLayout mDrawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +70,43 @@ public class ExchangesActivity extends AppCompatActivity {
         } catch (Throwable throwable) {
             throwable.printStackTrace();
         }
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        ActionBar actionbar = getSupportActionBar();
+        actionbar.setDisplayHomeAsUpEnabled(true);
+        actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
+
+        mDrawerLayout = findViewById(R.id.drawer_layout);
+
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                        item.setCheckable(true);
+                        mDrawerLayout.closeDrawers();
+                        int id = item.getItemId();
+                        Intent intent;
+                        switch (id) {
+                            case R.id.coinmarketcaphome:
+                                intent = new Intent(ExchangesActivity.this, MainActivity.class);
+                                startActivity(intent);
+                                break;
+                            case R.id.addExchange:
+                                intent = new Intent(ExchangesActivity.this, AddExchangeActivity.class);
+                                startActivity(intent);
+                                break;
+                            case R.id.Portfolio:
+                                intent = new Intent(ExchangesActivity.this, ExchangesActivity.class);
+                                startActivity(intent);
+                                break;
+                        }
+                        return false;
+                    }
+                }
+        );
     }
 
     private TextView noExchangesMessage() {
@@ -92,5 +141,15 @@ public class ExchangesActivity extends AppCompatActivity {
         cardView.addView(exchangeText);
 
         return cardView;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                mDrawerLayout.openDrawer(GravityCompat.START);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

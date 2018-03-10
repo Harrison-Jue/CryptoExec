@@ -1,19 +1,17 @@
-package wit.cryptoexec.main;
+package wit.cryptoexec.main.CMC_Home;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 import java.text.DecimalFormat;
 import java.util.List;
 
 import wit.cryptoexec.R;
+import wit.cryptoexec.main.CMC_Home.CryptoInfo;
 
 /**
  * Created by kayya on 3/6/2018.

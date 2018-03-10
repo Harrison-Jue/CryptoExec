@@ -7,7 +7,7 @@
             android:title="CoinMarketCap - Home" />
         <item
             android:id="@+id/addExchange"
-            android:icon="@drawable/ic_button_trade"
+            android:icon="@drawable/ic_add_circle_black_24dp"
             android:title="Add Exchange" />
         <item
             android:id="@+id/Portfolio"
