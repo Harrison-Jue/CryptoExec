@@ -129,8 +129,6 @@ public class CoinMarketCapAdapter extends Fragment
 
                 //Add to Crypto Array
                 cryptoArr.add(crypto);
-
-                Log.v("parseJSONArray", cryptoArr.toString());
             }
         }
     }
