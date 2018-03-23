@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import wit.cryptoexec.OpenOrders.OpenOrders;
 import wit.cryptoexec.R;
 import wit.cryptoexec.backend.api.callbacks.ApiExchangesHandler;
 import wit.cryptoexec.backend.database.ApiDetailsDatabase;
@@ -104,7 +105,7 @@ public class ExchangesActivity extends AppCompatActivity {
                                 break;
                             case R.id.OpenOrders:
                                 intent = new Intent(ExchangesActivity.this, OpenOrders.class);
-                                startActivty(intent);
+                                startActivity(intent);
                                 break;
                         }
                         return false;

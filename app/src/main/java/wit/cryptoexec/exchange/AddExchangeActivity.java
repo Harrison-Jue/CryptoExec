@@ -20,6 +20,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import wit.cryptoexec.OpenOrders.OpenOrders;
 import wit.cryptoexec.R;
 import wit.cryptoexec.backend.database.ApiDetailsDatabase;
 import wit.cryptoexec.main.CMC_Home.CoinMarketCapAdapter;
@@ -75,7 +76,7 @@ public class AddExchangeActivity extends AppCompatActivity {
                                 break;
                             case R.id.OpenOrders:
                                 intent = new Intent(AddExchangeActivity.this, OpenOrders.class);
-                                startActivty(intent);
+                                startActivity(intent);
                                 break;
                         }
                         return false;

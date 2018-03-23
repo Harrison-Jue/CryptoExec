@@ -3,7 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/CryptoExec.iml" filepath="$PROJECT_DIR$/CryptoExec.iml" />
+      <module fileurl="file://C:\Users\topaniana\Documents\GitHub\CryptoExec\CryptoExec.iml" filepath="C:\Users\topaniana\Documents\GitHub\CryptoExec\CryptoExec.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://C:\Users\topaniana\Documents\GitHub\CryptoExec\app\app.iml" filepath="C:\Users\topaniana\Documents\GitHub\CryptoExec\app\app.iml" />
     </modules>
   </component>
 </project>
