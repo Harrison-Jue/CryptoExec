@@ -366,4 +366,31 @@ public class BittrexAccountApiUsage {
             }
         });
     }
+
+    public void getOpenOrders(final JSONArrayResponseHandler callback) {
+        RequestParams params = new RequestParams();
+        params.add("apikey", apiKey);
+
+        client.get("getopenorders", params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                String response = new String(responseBody);
+                try {
+                    JSONObject responseJson = new JSONObject(response);
+                    if(responseJson.getBoolean("success")) {
+                        callback.onSuccess(responseJson.getJSONArray("result"));
+                    } else {
+                        throw new Error(String.format("success: %s", Boolean.toString(responseJson.getBoolean("success"))));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                Log.e(ERROR, error.getMessage());
+            }
+        });
+    }
 }
