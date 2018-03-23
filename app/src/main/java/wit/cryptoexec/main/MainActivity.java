@@ -63,6 +63,10 @@ public class MainActivity extends AppCompatActivity {
                                 intent = new Intent(MainActivity.this, ExchangesActivity.class);
                                 startActivity(intent);
                                 break;
+                            case R.id.OpenOrders:
+                                intent = new Intent(MainActivity.this, OpenOrders.class);
+                                startActivty(intent);
+                                break;
                         }
                         return false;
                     }

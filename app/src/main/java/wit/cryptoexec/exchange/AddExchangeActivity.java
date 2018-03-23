@@ -73,6 +73,10 @@ public class AddExchangeActivity extends AppCompatActivity {
                                 intent = new Intent(AddExchangeActivity.this, ExchangesActivity.class);
                                 startActivity(intent);
                                 break;
+                            case R.id.OpenOrders:
+                                intent = new Intent(AddExchangeActivity.this, OpenOrders.class);
+                                startActivty(intent);
+                                break;
                         }
                         return false;
                     }
