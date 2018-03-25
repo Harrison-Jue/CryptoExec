@@ -24,7 +24,8 @@
         <activity
             android:name=".OpenOrders.OpenOrders"
             android:label="@string/title_activity_open_orders"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity android:name=".testing.testing"></activity>
     </application>
 
 </manifest>

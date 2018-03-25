@@ -122,7 +122,11 @@ public class ApiDetailsDatabase {
         reference.child(exchangeService).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                callback.onSuccess(dataSnapshot.child("apiKey").getValue(String.class), dataSnapshot.child("apiSecret").getValue().toString());
+                try {
+                    callback.onSuccess(dataSnapshot.child("apiKey").getValue(String.class), dataSnapshot.child("apiSecret").getValue().toString());
+                } catch (Throwable throwable) {
+                    throwable.printStackTrace();
+                }
             }
 
             @Override

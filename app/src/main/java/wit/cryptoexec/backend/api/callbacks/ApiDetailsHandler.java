@@ -5,5 +5,5 @@ package wit.cryptoexec.backend.api.callbacks;
  */
 
 public interface ApiDetailsHandler {
-    void onSuccess(String key, String secret);
+    void onSuccess(String key, String secret) throws Throwable;
 }

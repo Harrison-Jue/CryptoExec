@@ -9,6 +9,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import cz.msebera.android.httpclient.Header;
+import wit.cryptoexec.backend.api.bittrex.utils.EncryptionUtility;
+import wit.cryptoexec.backend.api.bittrex.utils.Params;
 import wit.cryptoexec.backend.api.callbacks.ApiKeyHandler;
 import wit.cryptoexec.backend.api.callbacks.JSONArrayResponseHandler;
 import wit.cryptoexec.backend.api.callbacks.JSONObjectResponseHandler;
@@ -20,23 +22,20 @@ import wit.cryptoexec.backend.database.ApiDetailsDatabase;
 
 public class BittrexAccountApiUsage {
     private String ERROR = "ERROR";
+
+    private BittrexAccountApiClient client;
+
     private String apiKey;
 
-    private BittrexAccountApiClient client = new BittrexAccountApiClient();
-
-    public BittrexAccountApiUsage() throws Throwable {
-        ApiDetailsDatabase apiDetailsDatabase = new ApiDetailsDatabase();
-        apiDetailsDatabase.getApiKey("Bittrex", new ApiKeyHandler() {
-            @Override
-            public void onSuccess(String key) {
-                apiKey = key;
-            }
-        });
+    public BittrexAccountApiUsage(String key, String secret) throws Throwable {
+        client = new BittrexAccountApiClient(key, secret);
+        apiKey = key;
     }
 
     public void getBalances(final JSONArrayResponseHandler callback) {
-        RequestParams params = new RequestParams();
+        Params params = new Params();
         params.add("apikey", apiKey);
+        params.add("nonce", EncryptionUtility.generateNonce());
 
         client.get("getbalances", params, new AsyncHttpResponseHandler() {
             @Override
@@ -62,8 +61,9 @@ public class BittrexAccountApiUsage {
     }
 
     public void getBalance(String currency, final JSONObjectResponseHandler callback) {
-        RequestParams params = new RequestParams();
+        Params params = new Params();
         params.add("apikey", apiKey);
+        params.add("nonce", EncryptionUtility.generateNonce());
         params.add("currency", currency);
 
         client.get("getbalance", params, new AsyncHttpResponseHandler() {
@@ -90,8 +90,9 @@ public class BittrexAccountApiUsage {
     }
 
     public void getDepositAddress(String currency, final JSONObjectResponseHandler callback) {
-        RequestParams params = new RequestParams();
+        Params params = new Params();
         params.add("apikey", apiKey);
+        params.add("nonce", EncryptionUtility.generateNonce());
         params.add("currency", currency);
 
         client.get("getdepositaddress", params, new AsyncHttpResponseHandler() {
@@ -114,8 +115,9 @@ public class BittrexAccountApiUsage {
     }
 
     public void withdraw(String currency, String quantity, String address, final JSONArrayResponseHandler callback) {
-        RequestParams params = new RequestParams();
+        Params params = new Params();
         params.add("apikey", apiKey);
+        params.add("nonce", EncryptionUtility.generateNonce());
         params.add("currency", currency);
         params.add("quantity", quantity);
         params.add("address", address);
@@ -144,8 +146,9 @@ public class BittrexAccountApiUsage {
     }
 
     public void withdraw(String currency, String quantity, String address, String paymentId, final JSONArrayResponseHandler callback) {
-        RequestParams params = new RequestParams();
+        Params params = new Params();
         params.add("apikey", apiKey);
+        params.add("nonce", EncryptionUtility.generateNonce());
         params.add("currency", currency);
         params.add("quantity", quantity);
         params.add("address", address);
@@ -175,8 +178,9 @@ public class BittrexAccountApiUsage {
     }
 
     public void getOrder(String uuid, final JSONObjectResponseHandler callback) {
-        RequestParams params = new RequestParams();
+        Params params = new Params();
         params.add("apikey", apiKey);
+        params.add("nonce", EncryptionUtility.generateNonce());
         params.add("uuid", uuid);
 
         client.get("getorder", params, new AsyncHttpResponseHandler() {
@@ -203,8 +207,9 @@ public class BittrexAccountApiUsage {
     }
 
     public void getOrderHistory(final JSONArrayResponseHandler callback) {
-        RequestParams params = new RequestParams();
+        Params params = new Params();
         params.add("apikey", apiKey);
+        params.add("nonce", EncryptionUtility.generateNonce());
 
         client.get("getorderhistory", params, new AsyncHttpResponseHandler() {
             @Override
@@ -215,6 +220,7 @@ public class BittrexAccountApiUsage {
                     if(responseJson.getBoolean("success")) {
                         callback.onSuccess(responseJson.getJSONArray("result"));
                     } else {
+                        Log.v("ERROR", response);
                         throw new Error(String.format("success: %s", Boolean.toString(responseJson.getBoolean("success"))));
                     }
                 } catch (JSONException e) {
@@ -230,8 +236,9 @@ public class BittrexAccountApiUsage {
     }
 
     public void getOrderHistory(String market, final JSONArrayResponseHandler callback) {
-        RequestParams params = new RequestParams();
+        Params params = new Params();
         params.add("apikey", apiKey);
+        params.add("nonce", EncryptionUtility.generateNonce());
         params.add("market", market);
 
         client.get("getorderhistory", params, new AsyncHttpResponseHandler() {
@@ -258,8 +265,9 @@ public class BittrexAccountApiUsage {
     }
 
     public void getWithdrawalHistory(final JSONArrayResponseHandler callback) {
-        RequestParams params = new RequestParams();
+        Params params = new Params();
         params.add("apikey", apiKey);
+        params.add("nonce", EncryptionUtility.generateNonce());
 
         client.get("getwithdrawalhistory", params, new AsyncHttpResponseHandler() {
             @Override
@@ -285,8 +293,9 @@ public class BittrexAccountApiUsage {
     }
 
     public void getWithdrawalHistory(String currency, final JSONArrayResponseHandler callback) {
-        RequestParams params = new RequestParams();
+        Params params = new Params();
         params.add("apikey", apiKey);
+        params.add("nonce", EncryptionUtility.generateNonce());
         params.add("currency", currency);
 
         client.get("getwithdrawalhistory", params, new AsyncHttpResponseHandler() {
@@ -313,8 +322,9 @@ public class BittrexAccountApiUsage {
     }
 
     public void getDepositHistory(final JSONArrayResponseHandler callback) {
-        RequestParams params = new RequestParams();
+        Params params = new Params();
         params.add("apikey", apiKey);
+        params.add("nonce", EncryptionUtility.generateNonce());
 
         client.get("getdeposithistory", params, new AsyncHttpResponseHandler() {
             @Override
@@ -340,8 +350,9 @@ public class BittrexAccountApiUsage {
     }
 
     public void getDepositHistory(String currency, final JSONArrayResponseHandler callback) {
-        RequestParams params = new RequestParams();
+        Params params = new Params();
         params.add("apikey", apiKey);
+        params.add("nonce", EncryptionUtility.generateNonce());
         params.add("currency", currency);
 
         client.get("getdeposithistory", params, new AsyncHttpResponseHandler() {
@@ -368,8 +379,9 @@ public class BittrexAccountApiUsage {
     }
 
     public void getOpenOrders(final JSONArrayResponseHandler callback) {
-        RequestParams params = new RequestParams();
+        Params params = new Params();
         params.add("apikey", apiKey);
+        params.add("nonce", EncryptionUtility.generateNonce());
 
         client.get("getopenorders", params, new AsyncHttpResponseHandler() {
             @Override
