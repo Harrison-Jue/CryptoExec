@@ -9,6 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import cz.msebera.android.httpclient.Header;
+import wit.cryptoexec.backend.api.bittrex.utils.UrlParams;
 import wit.cryptoexec.backend.api.callbacks.ApiKeyHandler;
 import wit.cryptoexec.backend.api.callbacks.BooleanResponseHandler;
 import wit.cryptoexec.backend.api.callbacks.JSONArrayResponseHandler;
@@ -20,23 +21,15 @@ import wit.cryptoexec.backend.database.ApiDetailsDatabase;
 
 public class BittrexMarketApiUsage {
     private String ERROR = "ERROR";
-    private String apiKey;
 
-    private BittrexMarketApiClient client = new BittrexMarketApiClient();
+    private BittrexMarketApiClient client;
 
-    public BittrexMarketApiUsage() throws Throwable {
-        ApiDetailsDatabase apiDetailsDatabase = new ApiDetailsDatabase();
-        apiDetailsDatabase.getApiKey("Bittrex", new ApiKeyHandler() {
-            @Override
-            public void onSuccess(String key) {
-                apiKey = key;
-            }
-        });
+    public BittrexMarketApiUsage(String key, String secret) throws Throwable {
+        client = new BittrexMarketApiClient(key, secret);
     }
 
     public void buyLimit(String market, String quantity, String rate, final JSONArrayResponseHandler callback) {
-        RequestParams params = new RequestParams();
-        params.add("apikey", apiKey);
+        UrlParams params = new UrlParams();
         params.add("market", market);
         params.add("quantity", quantity);
         params.add("rate", rate);
@@ -64,9 +57,8 @@ public class BittrexMarketApiUsage {
         });
     }
 
-    public void selllimit(String market, String quantity, String rate, final JSONArrayResponseHandler callback) {
-        RequestParams params = new RequestParams();
-        params.add("apikey", apiKey);
+    public void sellLimit(String market, String quantity, String rate, final JSONArrayResponseHandler callback) {
+        UrlParams params = new UrlParams();
         params.add("market", market);
         params.add("quantity", quantity);
         params.add("rate", rate);
@@ -95,8 +87,7 @@ public class BittrexMarketApiUsage {
     }
 
     public void cancel(String uuid, final BooleanResponseHandler callback) {
-        RequestParams params = new RequestParams();
-        params.add("apikey", apiKey);
+        UrlParams params = new UrlParams();
         params.add("uuid", uuid);
 
         client.get("cancel", params, new AsyncHttpResponseHandler() {
@@ -118,9 +109,8 @@ public class BittrexMarketApiUsage {
         });
     }
 
-    public void getopenorders(String market, final JSONArrayResponseHandler callback) {
-        RequestParams params = new RequestParams();
-        params.add("apikey", apiKey);
+    public void getOpenOrders(String market, final JSONArrayResponseHandler callback) {
+        UrlParams params = new UrlParams();
         params.add("market", market);
 
         client.get("getopenorders", params, new AsyncHttpResponseHandler() {

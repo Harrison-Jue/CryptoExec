@@ -1,5 +1,6 @@
 package wit.cryptoexec.backend.api.callbacks;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -7,5 +8,5 @@ import org.json.JSONObject;
  */
 
 public interface JSONObjectResponseHandler {
-    void onSuccess(JSONObject response);
+    void onSuccess(JSONObject response) throws JSONException;
 }

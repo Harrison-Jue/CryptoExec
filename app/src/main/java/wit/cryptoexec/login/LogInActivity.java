@@ -119,7 +119,9 @@ public class LogInActivity extends AppCompatActivity {
     }
 
     public void goToMain() {
-        Intent myIntent = new Intent(this, testing.class);
+        //Testing sandbox, make sure to comment out actual one when working with "testing" activity
+        //Intent myIntent = new Intent(this, testing.class);
+        Intent myIntent = new Intent(this, MainActivity.class);
         startActivity(myIntent);
     }
 

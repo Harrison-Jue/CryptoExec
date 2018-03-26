@@ -14,7 +14,9 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -112,6 +114,7 @@ public class ExchangesActivity extends AppCompatActivity {
                     }
                 }
         );
+
     }
 
     private TextView noExchangesMessage() {
@@ -123,27 +126,49 @@ public class ExchangesActivity extends AppCompatActivity {
         return exchangeText;
     }
 
-    private CardView createCardView(String exchangeString) {
+    private CardView createCardView(final String exchangeString) {
         CardView cardView = new CardView(getApplicationContext());
 
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        layoutParams.setMargins(20, 20, 0, 0);
+        layoutParams.setMargins(10, 10, 10, 10);
         cardView.setLayoutParams(layoutParams);
-
         cardView.setRadius(30);
-
-        cardView.setContentPadding(15, 15, 15, 15);
-
+        cardView.setContentPadding(10, 10, 10, 10);
         cardView.setMaxCardElevation(15);
-
         cardView.setCardElevation(9);
+        cardView.setUseCompatPadding(true);
+
+        RelativeLayout layout = new RelativeLayout(getApplicationContext());
+        layout.setLayoutParams(layoutParams);
 
         TextView exchangeText = new TextView(getApplicationContext());
-        exchangeText.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        RelativeLayout.LayoutParams relativeLayoutStart = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        relativeLayoutStart.addRule(RelativeLayout.ALIGN_PARENT_START);
+        relativeLayoutStart.addRule(RelativeLayout.CENTER_VERTICAL);
+        exchangeText.setLayoutParams(relativeLayoutStart);
         exchangeText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         exchangeText.setText(exchangeString);
+        exchangeText.setTextSize(20);
+        layout.addView(exchangeText);
 
-        cardView.addView(exchangeText);
+        Button deleteButton = new Button(getApplicationContext());
+        RelativeLayout.LayoutParams relativeLayoutEnd = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        relativeLayoutEnd.addRule(RelativeLayout.ALIGN_PARENT_END);
+        deleteButton.setLayoutParams(relativeLayoutEnd);
+        deleteButton.setText("Delete");
+        deleteButton.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                apiDetailsDatabase.deleteApiDetails(exchangeString);
+                finish();
+                Intent intent = new Intent(getApplicationContext(), ExchangesActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        layout.addView(deleteButton);
+        cardView.addView(layout);
 
         return cardView;
     }
