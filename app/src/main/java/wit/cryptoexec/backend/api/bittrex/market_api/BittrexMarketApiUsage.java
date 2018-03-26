@@ -3,17 +3,14 @@ package wit.cryptoexec.backend.api.bittrex.market_api;
 import android.util.Log;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import cz.msebera.android.httpclient.Header;
 import wit.cryptoexec.backend.api.bittrex.utils.UrlParams;
-import wit.cryptoexec.backend.api.callbacks.ApiKeyHandler;
 import wit.cryptoexec.backend.api.callbacks.BooleanResponseHandler;
 import wit.cryptoexec.backend.api.callbacks.JSONArrayResponseHandler;
-import wit.cryptoexec.backend.database.ApiDetailsDatabase;
 
 /**
  * Created by jueh on 3/7/2018.

@@ -1,8 +1,7 @@
 package wit.cryptoexec.backend.api.bittrex.utils;
 
-import java.io.UnsupportedEncodingException;
-import java.security.*;
-import java.util.Base64;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 
 import javax.crypto.Mac;

@@ -13,14 +13,18 @@ public class UrlParams {
     public RequestParams requestParams;
     public Map<String, String> pararms;
 
+    public static String NULL_VALUE = "NULL_VALUE";
+
     public UrlParams() {
         requestParams = new RequestParams();
         pararms = new HashMap<>();
     }
 
     public void add(String key, String value) {
-        requestParams.add(key, value);
-        pararms.put(key, value);
+        if(!value.equals(NULL_VALUE)) {
+            requestParams.add(key, value);
+            pararms.put(key, value);
+        }
     }
 
     public static String createFullUrl(String absoluteUrl, UrlParams urlParams){

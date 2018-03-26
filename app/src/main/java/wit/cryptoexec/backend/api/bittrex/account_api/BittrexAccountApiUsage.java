@@ -8,7 +8,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import cz.msebera.android.httpclient.Header;
-import wit.cryptoexec.backend.api.bittrex.utils.EncryptionUtility;
 import wit.cryptoexec.backend.api.bittrex.utils.UrlParams;
 import wit.cryptoexec.backend.api.callbacks.JSONArrayResponseHandler;
 import wit.cryptoexec.backend.api.callbacks.JSONObjectResponseHandler;
