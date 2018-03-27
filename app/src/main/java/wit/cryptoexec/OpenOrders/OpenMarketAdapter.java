@@ -8,10 +8,11 @@ import android.widget.ListView;
  */
 
 
-//public class OpenMarketAdapter extends Fragment {
+
+public class OpenMarketAdapter extends Fragment {
 //    private ListView listView;
 //
 //    private OpenMarketApiUsage.client;
 //
 //    public view on
-//}
+}

@@ -3,16 +3,14 @@ package wit.cryptoexec.backend.api.bittrex.account_api;
 import android.util.Log;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import cz.msebera.android.httpclient.Header;
-import wit.cryptoexec.backend.api.callbacks.ApiKeyHandler;
+import wit.cryptoexec.backend.api.bittrex.utils.UrlParams;
 import wit.cryptoexec.backend.api.callbacks.JSONArrayResponseHandler;
 import wit.cryptoexec.backend.api.callbacks.JSONObjectResponseHandler;
-import wit.cryptoexec.backend.database.ApiDetailsDatabase;
 
 /**
  * Created by jueh on 3/7/2018.
@@ -20,25 +18,17 @@ import wit.cryptoexec.backend.database.ApiDetailsDatabase;
 
 public class BittrexAccountApiUsage {
     private String ERROR = "ERROR";
-    private String apiKey;
 
-    private BittrexAccountApiClient client = new BittrexAccountApiClient();
+    private BittrexAccountApiClient client;
 
-    public BittrexAccountApiUsage() throws Throwable {
-        ApiDetailsDatabase apiDetailsDatabase = new ApiDetailsDatabase();
-        apiDetailsDatabase.getApiKey("Bittrex", new ApiKeyHandler() {
-            @Override
-            public void onSuccess(String key) {
-                apiKey = key;
-            }
-        });
+    public BittrexAccountApiUsage(String key, String secret) throws Throwable {
+        client = new BittrexAccountApiClient(key, secret);
     }
 
     public void getBalances(final JSONArrayResponseHandler callback) {
-        RequestParams params = new RequestParams();
-        params.add("apikey", apiKey);
+        UrlParams urlParams = new UrlParams();
 
-        client.get("getbalances", params, new AsyncHttpResponseHandler() {
+        client.get("getbalances", urlParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 String response = new String(responseBody);
@@ -62,11 +52,10 @@ public class BittrexAccountApiUsage {
     }
 
     public void getBalance(String currency, final JSONObjectResponseHandler callback) {
-        RequestParams params = new RequestParams();
-        params.add("apikey", apiKey);
-        params.add("currency", currency);
+        UrlParams urlParams = new UrlParams();
+        urlParams.add("currency", currency);
 
-        client.get("getbalance", params, new AsyncHttpResponseHandler() {
+        client.get("getbalance", urlParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 String response = new String(responseBody);
@@ -90,11 +79,10 @@ public class BittrexAccountApiUsage {
     }
 
     public void getDepositAddress(String currency, final JSONObjectResponseHandler callback) {
-        RequestParams params = new RequestParams();
-        params.add("apikey", apiKey);
-        params.add("currency", currency);
+        UrlParams urlParams = new UrlParams();
+        urlParams.add("currency", currency);
 
-        client.get("getdepositaddress", params, new AsyncHttpResponseHandler() {
+        client.get("getdepositaddress", urlParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 String response = new String(responseBody);
@@ -114,13 +102,12 @@ public class BittrexAccountApiUsage {
     }
 
     public void withdraw(String currency, String quantity, String address, final JSONArrayResponseHandler callback) {
-        RequestParams params = new RequestParams();
-        params.add("apikey", apiKey);
-        params.add("currency", currency);
-        params.add("quantity", quantity);
-        params.add("address", address);
+        UrlParams urlParams = new UrlParams();
+        urlParams.add("currency", currency);
+        urlParams.add("quantity", quantity);
+        urlParams.add("address", address);
 
-        client.get("withdraw", params, new AsyncHttpResponseHandler() {
+        client.get("withdraw", urlParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 String response = new String(responseBody);
@@ -144,14 +131,13 @@ public class BittrexAccountApiUsage {
     }
 
     public void withdraw(String currency, String quantity, String address, String paymentId, final JSONArrayResponseHandler callback) {
-        RequestParams params = new RequestParams();
-        params.add("apikey", apiKey);
-        params.add("currency", currency);
-        params.add("quantity", quantity);
-        params.add("address", address);
-        params.add("paymentid", paymentId);
+        UrlParams urlParams = new UrlParams();
+        urlParams.add("currency", currency);
+        urlParams.add("quantity", quantity);
+        urlParams.add("address", address);
+        urlParams.add("paymentid", paymentId);
 
-        client.get("withdraw", params, new AsyncHttpResponseHandler() {
+        client.get("withdraw", urlParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 String response = new String(responseBody);
@@ -175,11 +161,10 @@ public class BittrexAccountApiUsage {
     }
 
     public void getOrder(String uuid, final JSONObjectResponseHandler callback) {
-        RequestParams params = new RequestParams();
-        params.add("apikey", apiKey);
-        params.add("uuid", uuid);
+        UrlParams urlParams = new UrlParams();
+        urlParams.add("uuid", uuid);
 
-        client.get("getorder", params, new AsyncHttpResponseHandler() {
+        client.get("getorder", urlParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 String response = new String(responseBody);
@@ -203,10 +188,9 @@ public class BittrexAccountApiUsage {
     }
 
     public void getOrderHistory(final JSONArrayResponseHandler callback) {
-        RequestParams params = new RequestParams();
-        params.add("apikey", apiKey);
+        UrlParams urlParams = new UrlParams();
 
-        client.get("getorderhistory", params, new AsyncHttpResponseHandler() {
+        client.get("getorderhistory", urlParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 String response = new String(responseBody);
@@ -215,6 +199,7 @@ public class BittrexAccountApiUsage {
                     if(responseJson.getBoolean("success")) {
                         callback.onSuccess(responseJson.getJSONArray("result"));
                     } else {
+                        Log.v("ERROR", response);
                         throw new Error(String.format("success: %s", Boolean.toString(responseJson.getBoolean("success"))));
                     }
                 } catch (JSONException e) {
@@ -230,11 +215,10 @@ public class BittrexAccountApiUsage {
     }
 
     public void getOrderHistory(String market, final JSONArrayResponseHandler callback) {
-        RequestParams params = new RequestParams();
-        params.add("apikey", apiKey);
-        params.add("market", market);
+        UrlParams urlParams = new UrlParams();
+        urlParams.add("market", market);
 
-        client.get("getorderhistory", params, new AsyncHttpResponseHandler() {
+        client.get("getorderhistory", urlParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 String response = new String(responseBody);
@@ -258,10 +242,9 @@ public class BittrexAccountApiUsage {
     }
 
     public void getWithdrawalHistory(final JSONArrayResponseHandler callback) {
-        RequestParams params = new RequestParams();
-        params.add("apikey", apiKey);
+        UrlParams urlParams = new UrlParams();
 
-        client.get("getwithdrawalhistory", params, new AsyncHttpResponseHandler() {
+        client.get("getwithdrawalhistory", urlParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 String response = new String(responseBody);
@@ -285,11 +268,10 @@ public class BittrexAccountApiUsage {
     }
 
     public void getWithdrawalHistory(String currency, final JSONArrayResponseHandler callback) {
-        RequestParams params = new RequestParams();
-        params.add("apikey", apiKey);
-        params.add("currency", currency);
+        UrlParams urlParams = new UrlParams();
+        urlParams.add("currency", currency);
 
-        client.get("getwithdrawalhistory", params, new AsyncHttpResponseHandler() {
+        client.get("getwithdrawalhistory", urlParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 String response = new String(responseBody);
@@ -313,10 +295,9 @@ public class BittrexAccountApiUsage {
     }
 
     public void getDepositHistory(final JSONArrayResponseHandler callback) {
-        RequestParams params = new RequestParams();
-        params.add("apikey", apiKey);
+        UrlParams urlParams = new UrlParams();
 
-        client.get("getdeposithistory", params, new AsyncHttpResponseHandler() {
+        client.get("getdeposithistory", urlParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 String response = new String(responseBody);
@@ -340,11 +321,10 @@ public class BittrexAccountApiUsage {
     }
 
     public void getDepositHistory(String currency, final JSONArrayResponseHandler callback) {
-        RequestParams params = new RequestParams();
-        params.add("apikey", apiKey);
-        params.add("currency", currency);
+        UrlParams urlParams = new UrlParams();
+        urlParams.add("currency", currency);
 
-        client.get("getdeposithistory", params, new AsyncHttpResponseHandler() {
+        client.get("getdeposithistory", urlParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 String response = new String(responseBody);
@@ -368,10 +348,9 @@ public class BittrexAccountApiUsage {
     }
 
     public void getOpenOrders(final JSONArrayResponseHandler callback) {
-        RequestParams params = new RequestParams();
-        params.add("apikey", apiKey);
+        UrlParams urlParams = new UrlParams();
 
-        client.get("getopenorders", params, new AsyncHttpResponseHandler() {
+        client.get("getopenorders", urlParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 String response = new String(responseBody);

@@ -2,7 +2,9 @@ package wit.cryptoexec.backend.api.bittrex.account_api;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
+
+import wit.cryptoexec.backend.api.bittrex.utils.EncryptionUtility;
+import wit.cryptoexec.backend.api.bittrex.utils.UrlParams;
 
 /**
  * Created by jueh on 3/7/2018.
@@ -13,12 +15,20 @@ public class BittrexAccountApiClient {
 
     private static AsyncHttpClient client = new AsyncHttpClient();
 
-    public void get(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
-        client.get(getAbsoluteUrl(url), params, responseHandler);
+    private String apiKey;
+    private String apiSecret;
+
+    public BittrexAccountApiClient(String key, String secret) {
+        apiKey = key;
+        apiSecret = secret;
     }
 
-    public void post(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
-        client.post(getAbsoluteUrl(url), params, responseHandler);
+    public void get(String url, UrlParams urlParams, AsyncHttpResponseHandler responseHandler) {
+        urlParams.add("apikey", apiKey);
+        urlParams.add("nonce", EncryptionUtility.generateNonce());
+        String fullUrl = UrlParams.createFullUrl(getAbsoluteUrl(url), urlParams);
+        client.addHeader("apisign", EncryptionUtility.calculateHash(apiSecret, fullUrl));
+        client.get(getAbsoluteUrl(url), urlParams.requestParams, responseHandler);
     }
 
     private String getAbsoluteUrl(String relativeUrl) {

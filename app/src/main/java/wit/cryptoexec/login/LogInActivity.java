@@ -19,6 +19,7 @@ import com.google.firebase.auth.FirebaseUser;
 import wit.cryptoexec.exchange.ExchangesActivity;
 import wit.cryptoexec.R;
 import wit.cryptoexec.main.MainActivity;
+import wit.cryptoexec.testing.testing;
 
 public class LogInActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
@@ -118,6 +119,8 @@ public class LogInActivity extends AppCompatActivity {
     }
 
     public void goToMain() {
+        //Testing sandbox, make sure to comment out actual one when working with "testing" activity
+        //Intent myIntent = new Intent(this, testing.class);
         Intent myIntent = new Intent(this, MainActivity.class);
         startActivity(myIntent);
     }
