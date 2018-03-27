@@ -25,7 +25,6 @@ import wit.cryptoexec.OpenOrders.OpenOrders;
 import wit.cryptoexec.R;
 import wit.cryptoexec.backend.api.callbacks.ApiExchangesHandler;
 import wit.cryptoexec.backend.database.ApiDetailsDatabase;
-import wit.cryptoexec.main.CMC_Home.CoinMarketCapAdapter;
 import wit.cryptoexec.main.MainActivity;
 
 public class ExchangesActivity extends AppCompatActivity {
@@ -56,23 +55,6 @@ public class ExchangesActivity extends AppCompatActivity {
             }
         });
 
-
-        try {
-            apiDetailsDatabase.getExchanges(new ApiExchangesHandler() {
-                @Override
-                public void onSucess(ArrayList<String> response) {
-                    if(!response.isEmpty()) {
-                        for (String exchange : response) {
-                            exchangesLayout.addView(createCardView(exchange));
-                        }
-                    } else {
-                        exchangesLayout.addView(noExchangesMessage());
-                    }
-                }
-            });
-        } catch (Throwable throwable) {
-            throwable.printStackTrace();
-        }
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

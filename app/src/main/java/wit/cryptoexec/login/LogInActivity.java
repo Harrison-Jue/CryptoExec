@@ -66,9 +66,6 @@ public class LogInActivity extends AppCompatActivity {
                 goToMain();
             }
         });
-
-
-
     }
 
     @Override
