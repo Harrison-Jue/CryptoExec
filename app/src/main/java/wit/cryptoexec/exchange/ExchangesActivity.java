@@ -12,18 +12,29 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import wit.cryptoexec.OpenOrders.OpenOrders;
 import wit.cryptoexec.R;
+import wit.cryptoexec.backend.api.bittrex.account_api.BittrexAccountApiUsage;
+import wit.cryptoexec.backend.api.callbacks.ApiDetailsHandler;
 import wit.cryptoexec.backend.api.callbacks.ApiExchangesHandler;
+import wit.cryptoexec.backend.api.callbacks.JSONArrayResponseHandler;
 import wit.cryptoexec.backend.database.ApiDetailsDatabase;
 import wit.cryptoexec.main.MainActivity;
 
@@ -31,10 +42,12 @@ public class ExchangesActivity extends AppCompatActivity {
 
     private ApiDetailsDatabase apiDetailsDatabase;
 
-    private LinearLayout exchangesLayout;
-    private FloatingActionButton addExchanges;
-
     private DrawerLayout mDrawerLayout;
+
+    ExpandableListAdapter explistAdapter;
+    ExpandableListView expListView;
+    List<String> expListHeader;
+    HashMap<String, List<String>> expListChild;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,19 +55,6 @@ public class ExchangesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_exchanges);
 
         apiDetailsDatabase = new ApiDetailsDatabase();
-
-        exchangesLayout = findViewById(R.id.exchangesLayout);
-
-        addExchanges = findViewById(R.id.addExchange);
-
-        addExchanges.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), AddExchangeActivity.class);
-                startActivity(intent);
-            }
-        });
-
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -97,7 +97,118 @@ public class ExchangesActivity extends AppCompatActivity {
                 }
         );
 
+        expListView = findViewById(R.id.ExpandableList);
+        prepareListData();
+
+        explistAdapter = new ExpandableListAdapter(this, expListHeader, expListChild);
+        expListView.setAdapter(explistAdapter);
+
     }
+
+
+    private void prepareListData() {
+        expListHeader = new ArrayList<String>();
+        expListChild = new HashMap<String, List<String>>();
+
+        final ApiDetailsDatabase database = new ApiDetailsDatabase();
+
+        try {
+            database.getExchanges(new ApiExchangesHandler() {
+                @Override
+                public void onSucess(ArrayList<String> response) {
+                    if(!response.isEmpty()) {
+                        for (String exchange : response) {
+                            expListHeader.add(exchange);
+                            Log.v("DEBUGEXCHANGE0", expListHeader.get(0));
+                        }
+
+                        Log.v("DEBUGLIST", expListHeader.get(0));
+                        for(final String exchange : expListHeader) {
+                            try {
+                                database.getApiDetails(exchange, new ApiDetailsHandler() {
+                                    @Override
+                                    public void onSuccess(String key, String secret) throws Throwable {
+                                        Log.v("DEBUGKEY", key);
+                                        Log.v("DEBUGSECRET", secret);
+                                        BittrexAccountApiUsage client = new BittrexAccountApiUsage(key, secret);
+                                        client.getBalances(new JSONArrayResponseHandler() {
+                                            @Override
+                                            public void onSuccess(JSONArray response) throws JSONException {
+                                                Log.v("DEBUG", response.toString());
+                                                expListHeader.add(exchange);
+                                                for(int i = 0; i < response.length(); i++) {
+                                                    JSONObject balanceJson = response.getJSONObject(i);
+
+                                                    String currency = balanceJson.getString("Currency");
+                                                    double balance = balanceJson.getDouble("Balance");
+                                                    double available = balanceJson.getDouble("Available");
+                                                    double pending = balanceJson.getDouble("Pending");
+                                                    String cryptoAddress = balanceJson.getString("CryptoAddress");
+                                                    boolean requested  = balanceJson.optBoolean("Requested", false);
+                                                    String uuid = balanceJson.optString("Uuid", "null");
+
+                                                    Log.v("CURRENCY", currency);
+
+                                                    List<String> children = new ArrayList<String>();
+                                                    children.add(currency);
+                                                    expListChild.put(expListHeader.get(0), children);
+                                                }
+                                            }
+                                        });
+                                    }
+                                });
+                            } catch (Throwable throwable) {
+                                throwable.printStackTrace();
+                            }
+                        }
+                    }
+                }
+            });
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
+
+//        Log.v("DEBUGLIST", expListHeader.get(0));
+//        for(String exchange : expListHeader) {
+//            try {
+//                database.getApiDetails(exchange, new ApiDetailsHandler() {
+//                    @Override
+//                    public void onSuccess(String key, String secret) throws Throwable {
+//                        Log.v("DEBUGKEY", key);
+//                        Log.v("DEBUGSECRET", secret);
+//                        BittrexAccountApiUsage client = new BittrexAccountApiUsage(key, secret);
+//                        client.getBalances(new JSONArrayResponseHandler() {
+//                            @Override
+//                            public void onSuccess(JSONArray response) throws JSONException {
+//                                Log.v("DEBUG", response.toString());
+//                                for(int i = 0; i < response.length(); i++) {
+//                                    JSONObject balanceJson = response.getJSONObject(i);
+//
+//                                    String currency = balanceJson.getString("Currency");
+//                                    double balance = balanceJson.getDouble("Balance");
+//                                    double available = balanceJson.getDouble("Available");
+//                                    double pending = balanceJson.getDouble("Pending");
+//                                    String cryptoAddress = balanceJson.getString("CryptoAddress");
+//                                    boolean requested  = balanceJson.optBoolean("Requested", false);
+//                                    String uuid = balanceJson.optString("Uuid", "null");
+//
+//                                    List<String> Bittrex = new ArrayList<String>();
+//                                    Bittrex.add(currency);
+//                                    //Bittrex.add(balance);
+//                                    //Bittrex.add("Coin Value");
+//                                    expListChild.put(expListHeader.get(0), Bittrex);
+//
+//                                }
+//                            }
+//                        });
+//                    }
+//                });
+//            } catch (Throwable throwable) {
+//                throwable.printStackTrace();
+//            }
+//        }
+    }
+
 
     private TextView noExchangesMessage() {
         TextView exchangeText = new TextView(getApplicationContext());
@@ -106,53 +217,6 @@ public class ExchangesActivity extends AppCompatActivity {
         exchangeText.setText("No Exchanges under this Account");
 
         return exchangeText;
-    }
-
-    private CardView createCardView(final String exchangeString) {
-        CardView cardView = new CardView(getApplicationContext());
-
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        layoutParams.setMargins(10, 10, 10, 10);
-        cardView.setLayoutParams(layoutParams);
-        cardView.setRadius(30);
-        cardView.setContentPadding(10, 10, 10, 10);
-        cardView.setMaxCardElevation(15);
-        cardView.setCardElevation(9);
-        cardView.setUseCompatPadding(true);
-
-        RelativeLayout layout = new RelativeLayout(getApplicationContext());
-        layout.setLayoutParams(layoutParams);
-
-        TextView exchangeText = new TextView(getApplicationContext());
-        RelativeLayout.LayoutParams relativeLayoutStart = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        relativeLayoutStart.addRule(RelativeLayout.ALIGN_PARENT_START);
-        relativeLayoutStart.addRule(RelativeLayout.CENTER_VERTICAL);
-        exchangeText.setLayoutParams(relativeLayoutStart);
-        exchangeText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-        exchangeText.setText(exchangeString);
-        exchangeText.setTextSize(20);
-        layout.addView(exchangeText);
-
-        Button deleteButton = new Button(getApplicationContext());
-        RelativeLayout.LayoutParams relativeLayoutEnd = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        relativeLayoutEnd.addRule(RelativeLayout.ALIGN_PARENT_END);
-        deleteButton.setLayoutParams(relativeLayoutEnd);
-        deleteButton.setText("Delete");
-        deleteButton.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-        deleteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                apiDetailsDatabase.deleteApiDetails(exchangeString);
-                finish();
-                Intent intent = new Intent(getApplicationContext(), ExchangesActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        layout.addView(deleteButton);
-        cardView.addView(layout);
-
-        return cardView;
     }
 
     @Override

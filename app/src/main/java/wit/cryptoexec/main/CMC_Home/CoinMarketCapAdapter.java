@@ -61,7 +61,6 @@ public class CoinMarketCapAdapter extends Fragment
         public coinMarketCapData(Activity context,ListView listView) {
             this.listView=listView;
             this.context=context;
-            doInBackground();
         }
 
         @Override
