@@ -116,6 +116,7 @@ public class BittrexMarketApiUsage {
                 String response = new String(responseBody);
                 try {
                     JSONObject responseJson = new JSONObject(response);
+                    Log.v("RESPONSEJSON", responseJson.toString());
                     if(responseJson.getBoolean("success")) {
                         callback.onSuccess(responseJson.getJSONArray("result"));
                     } else {
