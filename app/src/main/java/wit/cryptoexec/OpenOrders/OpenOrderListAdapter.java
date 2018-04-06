@@ -12,6 +12,7 @@ import java.text.DecimalFormat;
 import java.util.List;
 
 import wit.cryptoexec.R;
+import wit.cryptoexec.exchange.PortfolioInfo;
 import wit.cryptoexec.main.CMC_Home.CryptoInfo;
 
 /**
@@ -25,6 +26,7 @@ public class OpenOrderListAdapter  extends ArrayAdapter<OpenOrderInfo> {
         super(context, rid, list);
         mInflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
     }
+
 
     public View getView(int position, View convertView, ViewGroup parent) {
         OpenOrderInfo item = (OpenOrderInfo)getItem(position);

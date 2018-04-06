@@ -3,9 +3,7 @@ package wit.cryptoexec.OpenOrders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -13,12 +11,10 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.View;
 
 import wit.cryptoexec.R;
 import wit.cryptoexec.exchange.AddExchangeActivity;
 import wit.cryptoexec.exchange.ExchangesActivity;
-import wit.cryptoexec.main.CMC_Home.CoinMarketCapAdapter;
 import wit.cryptoexec.main.MainActivity;
 
 public class OpenOrders extends AppCompatActivity {
@@ -39,7 +35,6 @@ public class OpenOrders extends AppCompatActivity {
 
         Fragment fragment = new OpenMarketAdapter();
         getSupportFragmentManager().beginTransaction().replace(R.id.fragmentTableFrame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
-
 
         mDrawerLayout = findViewById(R.id.drawer_layout);
 
