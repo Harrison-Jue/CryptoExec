@@ -80,7 +80,7 @@
         android:paddingTop="5dp">
 
         <TextView
-            android:id="@+id/Pending"
+            android:id="@+id/Pending1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="end"
@@ -89,12 +89,12 @@
             android:elegantTextHeight="true"
             android:gravity="top|end"
             android:maxLines="1"
-            android:textAlignment="textEnd"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            android:text="Pending"
+            android:textAlignment="center"
+            android:textSize="14sp" />
 
         <TextView
-            android:id="@+id/CryptoAddress"
+            android:id="@+id/Pending"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="end"
@@ -102,8 +102,8 @@
             android:height="0dp"
             android:gravity="bottom|end"
             android:maxLines="1"
-            android:textAlignment="textEnd"
-            android:textSize="20sp" />
+            android:textAlignment="center"
+            android:textSize="18sp" />
     </LinearLayout>
 
 </LinearLayout>

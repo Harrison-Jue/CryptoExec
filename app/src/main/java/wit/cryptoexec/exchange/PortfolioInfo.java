@@ -6,5 +6,5 @@ public class PortfolioInfo {
     public Double balance;
     public Double available;
     public Double pending;
-    public String cryptoAddress;
+    //public String cryptoAddress;
 }

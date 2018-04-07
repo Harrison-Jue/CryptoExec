@@ -41,9 +41,9 @@ public class PortfolioListAdapter extends ArrayAdapter<PortfolioInfo>{
         String pendingHolder = Double.toString(item.pending);
         Pending.setText(pendingHolder);
 
-        TextView CryptoAddress;
-        CryptoAddress = (TextView)view.findViewById(R.id.CryptoAddress);
-        CryptoAddress.setText(item.cryptoAddress);
+//        TextView CryptoAddress;
+//        CryptoAddress = (TextView)view.findViewById(R.id.CryptoAddress);
+//        CryptoAddress.setText(item.cryptoAddress);
 
         return view;
     }
