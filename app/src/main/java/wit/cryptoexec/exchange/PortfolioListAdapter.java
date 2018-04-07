@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 import wit.cryptoexec.R;
@@ -22,19 +23,26 @@ public class PortfolioListAdapter extends ArrayAdapter<PortfolioInfo>{
         PortfolioInfo item = (PortfolioInfo)getItem(position);
         View view = mInflater.inflate(R.layout.portfolio_item, null);
 
+
+        DecimalFormat df = new DecimalFormat();
+        df.setMaximumFractionDigits(10);
+
         TextView CoinName;
         CoinName = (TextView)view.findViewById(R.id.CoinName);
         CoinName.setText(item.currency);
 
         TextView Balance;
         Balance = (TextView)view.findViewById(R.id.Balance);
-        String balanceHolder = Double.toString(item.balance);
-        Balance.setText(balanceHolder);
+        Balance.setText(String.valueOf(df.format(item.balance)));
 
         TextView Available;
         Available = (TextView)view.findViewById(R.id.Available);
-        String availableHolder = Double.toString(item.available);
-        Available.setText(availableHolder);
+        Available.setText(String.valueOf(df.format(item.available)));
+
+//        TextView Available;
+//        Available = (TextView)view.findViewById(R.id.Available);
+//        String availableHolder = Double.toString(item.available);
+//        Available.setText(availableHolder);
 
         TextView Pending;
         Pending = (TextView)view.findViewById(R.id.Pending);

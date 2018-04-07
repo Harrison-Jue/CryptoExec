@@ -15,6 +15,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,8 +78,8 @@ public class ExchangeAccountAdapter  extends android.support.v4.app.Fragment{
                                             accountBalance.uuid = balanceJson.optString("Uuid", "null");
 
                                             accountBalance.currency = balanceJson.getString("Currency");
-                                            accountBalance.balance = balanceJson.getDouble("Balance");
-                                            accountBalance.available = balanceJson.getDouble("Available");
+                                            accountBalance.balance = new BigDecimal(balanceJson.getDouble("Balance"));
+                                            accountBalance.available = new BigDecimal(balanceJson.getDouble("Available"));
                                             accountBalance.pending = balanceJson.getDouble("Pending");
 
                                             //accountBalance.cryptoAddress = balanceJson.getString("CryptoAddress");
