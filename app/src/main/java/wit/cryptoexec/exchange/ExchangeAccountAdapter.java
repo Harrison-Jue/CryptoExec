@@ -80,6 +80,7 @@ public class ExchangeAccountAdapter  extends android.support.v4.app.Fragment{
                                             accountBalance.balance = balanceJson.getDouble("Balance");
                                             accountBalance.available = balanceJson.getDouble("Available");
                                             accountBalance.pending = balanceJson.getDouble("Pending");
+
                                             accountBalance.cryptoAddress = balanceJson.getString("CryptoAddress");
                                             cryptoArr.add(accountBalance);
                                         }

@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import java.text.DecimalFormat;
 import java.util.List;
 
 import wit.cryptoexec.R;
@@ -23,28 +22,28 @@ public class PortfolioListAdapter extends ArrayAdapter<PortfolioInfo>{
         PortfolioInfo item = (PortfolioInfo)getItem(position);
         View view = mInflater.inflate(R.layout.portfolio_item, null);
 
-        TextView Exchange;
-        Exchange = (TextView)view.findViewById(R.id.CoinName);
-        Exchange.setText(item.currency);
+        TextView CoinName;
+        CoinName = (TextView)view.findViewById(R.id.CoinName);
+        CoinName.setText(item.currency);
 
-        TextView orderType;
-        orderType = (TextView)view.findViewById(R.id.Balance);
+        TextView Balance;
+        Balance = (TextView)view.findViewById(R.id.Balance);
         String balanceHolder = Double.toString(item.balance);
-        orderType.setText(balanceHolder);
+        Balance.setText(balanceHolder);
 
-        TextView Limit;
-        Limit = (TextView)view.findViewById(R.id.Available);
+        TextView Available;
+        Available = (TextView)view.findViewById(R.id.Available);
         String availableHolder = Double.toString(item.available);
-        Limit.setText(availableHolder);
+        Available.setText(availableHolder);
 
-        TextView Quantity;
-        Quantity = (TextView)view.findViewById(R.id.Pending);
+        TextView Pending;
+        Pending = (TextView)view.findViewById(R.id.Pending);
         String pendingHolder = Double.toString(item.pending);
-        Quantity.setText(pendingHolder);
+        Pending.setText(pendingHolder);
 
-        TextView Remaining;
-        Remaining = (TextView)view.findViewById(R.id.CryptoAddress);
-        Remaining.setText(item.cryptoAddress);
+        TextView CryptoAddress;
+        CryptoAddress = (TextView)view.findViewById(R.id.CryptoAddress);
+        CryptoAddress.setText(item.cryptoAddress);
 
         return view;
     }
