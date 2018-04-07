@@ -7,5 +7,4 @@ public class PortfolioInfo {
     public Double available;
     public Double pending;
     public String cryptoAddress;
-
 }
