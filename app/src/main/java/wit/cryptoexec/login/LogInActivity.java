@@ -59,13 +59,13 @@ public class LogInActivity extends AppCompatActivity {
             }
         });
 
-        Button continueButton = findViewById(R.id.button_continue);
-        continueButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                goToMain();
-            }
-        });
+//        Button continueButton = findViewById(R.id.button_continue);
+//        continueButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                goToMain();
+//            }
+//        });
 
 
 

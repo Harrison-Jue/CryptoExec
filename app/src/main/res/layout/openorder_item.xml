@@ -89,9 +89,7 @@
             android:elegantTextHeight="true"
             android:gravity="top|end"
             android:maxLines="1"
-            android:textAlignment="textEnd"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            android:textAlignment="textEnd" />
 
         <TextView
             android:id="@+id/QuantityRemaining"
