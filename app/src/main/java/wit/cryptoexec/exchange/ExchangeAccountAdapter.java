@@ -16,6 +16,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,7 +71,6 @@ public class ExchangeAccountAdapter  extends android.support.v4.app.Fragment{
                                 client.getBalances(new JSONArrayResponseHandler() {
                                     @Override
                                     public void onSuccess(JSONArray response) throws JSONException {
-                                        Log.v("RESPONSELENGTH", String.valueOf(response.length()));
                                         for(int i = 0; i < response.length(); i++) {
                                             JSONObject balanceJson = response.getJSONObject(i);
                                             PortfolioInfo accountBalance = new PortfolioInfo();
@@ -81,9 +81,11 @@ public class ExchangeAccountAdapter  extends android.support.v4.app.Fragment{
                                             accountBalance.balance = new BigDecimal(balanceJson.getDouble("Balance"));
                                             accountBalance.available = new BigDecimal(balanceJson.getDouble("Available"));
                                             accountBalance.pending = balanceJson.getDouble("Pending");
-
+                                            Log.v("BALANCE", accountBalance.balance.toString());
                                             //accountBalance.cryptoAddress = balanceJson.getString("CryptoAddress");
-                                            cryptoArr.add(accountBalance);
+                                            if (accountBalance.balance.compareTo(BigDecimal.ZERO) > 0) {
+                                                cryptoArr.add(accountBalance);
+                                            }
                                         }
                                         PortfolioListAdapter adapter = new PortfolioListAdapter(context, 0, cryptoArr);
                                         listView.setAdapter(adapter);
