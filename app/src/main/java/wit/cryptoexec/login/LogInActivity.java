@@ -20,7 +20,6 @@ import wit.cryptoexec.OpenOrders.OpenOrders;
 import wit.cryptoexec.exchange.ExchangesActivity;
 import wit.cryptoexec.R;
 import wit.cryptoexec.main.MainActivity;
-import wit.cryptoexec.testing.testing;
 
 public class LogInActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
