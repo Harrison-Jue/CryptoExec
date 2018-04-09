@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
 
-        /* Code omitted, crashes on going back to main activity because of onSaveInstanceState error
+        /* Code omitted, crashes on going back to main activity because of onSaveInstanceState error */
 //        handler = new Handler();
 //        handler.post(refreshTask);
 
