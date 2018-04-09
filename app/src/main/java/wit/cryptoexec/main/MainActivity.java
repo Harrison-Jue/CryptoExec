@@ -2,6 +2,7 @@ package wit.cryptoexec.main;
 
 
 import android.content.Intent;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -24,6 +25,15 @@ import wit.cryptoexec.main.CMC_Home.CoinMarketCapAdapter;
 public class MainActivity extends AppCompatActivity {
 
     private DrawerLayout mDrawerLayout;
+    private Handler handler;
+    private Runnable refreshTask = new Runnable() {
+        @Override
+        public void run() {
+            Fragment fragment = new CoinMarketCapAdapter();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragmentTableFrame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
+            handler.postDelayed(refreshTask, 30000);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +47,8 @@ public class MainActivity extends AppCompatActivity {
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
 
-        Fragment fragment = new CoinMarketCapAdapter();
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentTableFrame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
+        handler = new Handler();
+        handler.post(refreshTask);
 
         mDrawerLayout = findViewById(R.id.drawer_layout);
 
