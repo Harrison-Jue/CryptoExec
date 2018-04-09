@@ -25,15 +25,17 @@ import wit.cryptoexec.main.CMC_Home.CoinMarketCapAdapter;
 public class MainActivity extends AppCompatActivity {
 
     private DrawerLayout mDrawerLayout;
-    private Handler handler;
-    private Runnable refreshTask = new Runnable() {
-        @Override
-        public void run() {
-            Fragment fragment = new CoinMarketCapAdapter();
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragmentTableFrame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
-            handler.postDelayed(refreshTask, 30000);
-        }
-    };
+
+    /* Code omitted, crashes on going back to main activity because of onSaveInstanceState error */
+//    private Handler handler;
+//    private Runnable refreshTask = new Runnable() {
+//        @Override
+//        public void run() {
+//            Fragment fragment = new CoinMarketCapAdapter();
+//            getSupportFragmentManager().beginTransaction().replace(R.id.fragmentTableFrame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
+//            handler.postDelayed(refreshTask, 10000);
+//        }
+//    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,8 +49,12 @@ public class MainActivity extends AppCompatActivity {
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
 
-        handler = new Handler();
-        handler.post(refreshTask);
+        /* Code omitted, crashes on going back to main activity because of onSaveInstanceState error
+//        handler = new Handler();
+//        handler.post(refreshTask);
+
+        Fragment fragment = new CoinMarketCapAdapter();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentTableFrame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
 
         mDrawerLayout = findViewById(R.id.drawer_layout);
 
